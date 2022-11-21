@@ -1,6 +1,8 @@
 package site.rafalszatkowski.school_management_system.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.repositories.StudentRepository;
@@ -82,5 +84,8 @@ public class StudentServiceImpl implements StudentService {
         return (List<Student>) studentRepository.findAll();
     }
 
-
+    @Override
+    public Page<Student> getAllStudents(Pageable pageable) {
+        return studentRepository.findAll(pageable);
+    }
 }

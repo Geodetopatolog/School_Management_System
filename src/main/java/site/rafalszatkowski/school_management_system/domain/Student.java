@@ -23,6 +23,7 @@ public class Student extends Person {
     @Column(name = "ID")
     private Long id_student;
 
+    @Column(name = "Kierunek")
     private String degreeCourse;
 
     @ManyToMany

@@ -23,12 +23,24 @@ public class Teacher extends Person{
     @Column(name = "ID")
     private Long id_teacher;
 
+    @Column(name = "Przedmiot")
     private String schoolSubject;
 
     @ManyToMany (mappedBy = "teachers")
     private List<Student> students = new ArrayList<>();
 
-
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id_student=" + id_teacher +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", age='" + getAge() + '\'' +
+                ", degreeCourse='" + schoolSubject + '\'' +
+                ", teachers=" + students +
+                '}';
+    }
 
 
 }

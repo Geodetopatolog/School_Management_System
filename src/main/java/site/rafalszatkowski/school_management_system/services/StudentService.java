@@ -1,5 +1,7 @@
 package site.rafalszatkowski.school_management_system.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import site.rafalszatkowski.school_management_system.domain.Student;
 
 import java.util.List;
@@ -15,8 +17,10 @@ public interface StudentService {
     public boolean deleteStudent(Student student);
 
     public List<Student> getAllStudents();
-
+    Page<Student> getAllStudents(Pageable pageable);
 
     Optional<List<Student>> getStudent(String id, String name, String surname, String email, String age, String degreeCourse);
+
+
 
 }

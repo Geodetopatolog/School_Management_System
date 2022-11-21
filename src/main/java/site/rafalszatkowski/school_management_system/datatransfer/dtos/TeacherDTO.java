@@ -7,14 +7,14 @@ import java.util.regex.Pattern;
 
 @Data
 @Builder
-public class StudentDTO {
+public class TeacherDTO {
 
-    private Long id_student;
+    private Long id_teacher;
     private String name;
     private String surname;
     private Integer age;
     private String email;
-    private String degreeCourse;
+    private String schoolSubject;
 
     public boolean validateData() {
         return (name.length()>2
@@ -23,5 +23,4 @@ public class StudentDTO {
                 && Pattern.matches("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", email)
         );
     }
-
 }

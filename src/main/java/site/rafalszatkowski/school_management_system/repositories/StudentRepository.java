@@ -2,13 +2,14 @@ package site.rafalszatkowski.school_management_system.repositories;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import site.rafalszatkowski.school_management_system.domain.Student;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentRepository extends CrudRepository<Student,Long> {
+public interface StudentRepository extends CrudRepository<Student,Long>, PagingAndSortingRepository<Student, Long> {
 
     @Query("select s from Student s where s.name = :queryName and s.surname = :querySurname and s.email = :queryEmail and s.age = :queryAge")
     Optional<Student> getStudentByAllData(@Param("queryName") String name,

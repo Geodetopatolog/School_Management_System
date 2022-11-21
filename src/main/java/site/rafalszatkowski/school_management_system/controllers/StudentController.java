@@ -1,10 +1,12 @@
 package site.rafalszatkowski.school_management_system.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.mappers.StudentMapper;
@@ -19,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentController {
 
+    public static final int PAGE_SIZE = 5;
     private final StudentService studentService;
 
 
@@ -39,7 +42,7 @@ public class StudentController {
     }
 
     @GetMapping("/student/query")
-    public @ResponseBody List<StudentDTO> getStudent(@RequestParam(defaultValue = "%%") String id,
+    public @ResponseBody ResponseEntity<?> getStudent(@RequestParam(defaultValue = "%%") String id,
                                        @RequestParam(defaultValue = "%%") String name,
                                        @RequestParam(defaultValue = "%%") String surname,
                                        @RequestParam(defaultValue = "%%") String email,
@@ -48,15 +51,13 @@ public class StudentController {
 
         if (id.equals("%%") && name.equals("%%") && surname.equals("%%")
                 && email.equals("%%") && age.equals("%%") && degreeCourse.equals("%%")) {
-                throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Nie wprowadzono parametrów wyszukiwania");
+                return ResponseEntity.badRequest().body("Nie wprowadzono parametrów wyszukiwania");
         } else {
             Optional<List<Student>> optionalQueryResult = studentService.getStudent(id, name, surname, email, age, degreeCourse);
-                if (optionalQueryResult.isPresent()) {
-                    return StudentMapper.INSTANCE.StudentsToStudentDtos(optionalQueryResult.get());
+                if (optionalQueryResult.isPresent() && optionalQueryResult.get().size()>0) {
+                    return ResponseEntity.status(200).body(StudentMapper.INSTANCE.StudentsToStudentDtos(optionalQueryResult.get()));
                 } else {
-                    throw new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Nie znaleziono wpisów odpowiadających wyszukiwaniu");
+                    return ResponseEntity.status(404).body("Nie znaleziono wpisów odpowiadających wyszukiwaniu");
             }
         }
 
@@ -85,9 +86,9 @@ public class StudentController {
 
 
     @DeleteMapping("/student")
-    public ResponseEntity<?> removeStudent(@RequestParam Long id_student) {
+    public ResponseEntity<?> removeStudent(@RequestParam Long id) {
 
-        if (studentService.deleteStudent(id_student)) {
+        if (studentService.deleteStudent(id)) {
             return ResponseEntity.ok().build();
         } else  {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student, którego dane próbowano usunąć, " +
@@ -97,8 +98,15 @@ public class StudentController {
 
 
     @GetMapping("/student/all")
-    public @ResponseBody List<StudentDTO> getAllStudents () {
-        return StudentMapper.INSTANCE.StudentsToStudentDtos(studentService.getAllStudents());
+    public @ResponseBody List<StudentDTO> getAllStudents (@RequestParam Optional<String> page) {
+        if (page.isPresent()) {
+            int currentPage = Integer.parseInt(page.get());
+            Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
+            Page<Student> students = studentService.getAllStudents(pageRequest);
+            return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
+        } else {
+            return StudentMapper.INSTANCE.StudentsToStudentDtos(studentService.getAllStudents());
+        }
     }
 
 
