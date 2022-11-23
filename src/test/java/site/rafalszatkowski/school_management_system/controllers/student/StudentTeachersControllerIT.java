@@ -122,7 +122,7 @@ class StudentTeachersControllerIT {
                     "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (12, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 22, '1');" +
                     "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 11, '1');" +
                     "insert into teachers_students_relations (id_student, id_teacher) values (4, 3);" +
-                    "insert into teachers_students_relations (id_student, id_teacher) values (4, 12);" //todo zmienić tak samo w drugim
+                    "insert into teachers_students_relations (id_student, id_teacher) values (4, 12);"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldReturn2xxAndListOfStudentTeachersWhenGetDataSuccessfully() throws URISyntaxException {
         //when

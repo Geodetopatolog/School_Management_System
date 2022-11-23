@@ -14,6 +14,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.jdbc.Sql;
+import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherCreationDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherDTO;
 
@@ -463,13 +464,13 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieD', 'NazwiskoD', 'aaa@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieE', 'NazwiskoE', 'aaa@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (6, 'ImieF', 'NazwiskoF', 'aaa@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieG', 'NazwiskoG', 'aaa@bbb.com', 22, '3');"
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 22, '1');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 21, '2');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 23, '2');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieD', 'NazwiskoD', 'aaa@bbb.com', 25, '2');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieE', 'NazwiskoE', 'aaa@bbb.com', 27, '2');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (6, 'ImieF', 'NazwiskoF', 'aaa@bbb.com', 24, '2');" +
+                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieG', 'NazwiskoG', 'aaa@bbb.com', 26, '3');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
                     "DELETE FROM teacher WHERE id = 1;" +
@@ -483,15 +484,51 @@ class TeacherControllerIT {
     void shouldReturnPageOfTeachers() throws URISyntaxException {
 
         //when
-        RequestEntity<Void> request = RequestEntity
+        RequestEntity<Void> request1 = RequestEntity
                 .get(createServerAddress("/teacher/all?page=0"))
                 .build();
 
-        ResponseEntity<List<TeacherDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
+        RequestEntity<Void> request2 = RequestEntity
+                .get(createServerAddress("/teacher/all?page=0&sortBy=name"))
+                .build();
 
-        //then:
-        Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
-        Assertions.assertEquals(5, response.getBody().size());
+        RequestEntity<Void> request3 = RequestEntity
+                .get(createServerAddress("/teacher/all?page=0&sortBy=name&descending=true"))
+                .build();
+
+        RequestEntity<Void> request4 = RequestEntity
+                .get(createServerAddress("/teacher/all?sortBy=age"))
+                .build();
+
+        RequestEntity<Void> request5 = RequestEntity
+                .get(createServerAddress("/teacher/all?sortBy=age&descending=true"))
+                .build();
+
+        ResponseEntity<List<TeacherDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
+
+        //then
+        Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(5, response1.getBody().size());
+
+        Assertions.assertTrue(response2.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(5, response2.getBody().size());
+        assertEquals("ImieA", response2.getBody().get(0).getName());
+
+        Assertions.assertTrue(response3.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(5, response3.getBody().size());
+        assertEquals("ImieG", response3.getBody().get(0).getName());
+
+        Assertions.assertTrue(response4.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(7, response4.getBody().size());
+        assertEquals(21, response4.getBody().get(0).getAge());
+
+        Assertions.assertTrue(response5.getStatusCode().is2xxSuccessful());
+        Assertions.assertEquals(7, response5.getBody().size());
+        assertEquals(27, response5.getBody().get(0).getAge());
     }
 
 
