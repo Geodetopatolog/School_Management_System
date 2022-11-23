@@ -1,13 +1,19 @@
 package site.rafalszatkowski.school_management_system.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 @Data
+//@SuperBuilder
+@NoArgsConstructor
 @MappedSuperclass
 public class Person {
+
+
 
     @Column (name = "Imię")
     private String name;

@@ -4,15 +4,13 @@ package site.rafalszatkowski.school_management_system.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
-//@NoArgsConstructor
 @Entity
 public class Teacher extends Person{
 
@@ -27,7 +25,7 @@ public class Teacher extends Person{
     private String schoolSubject;
 
     @ManyToMany (mappedBy = "teachers")
-    private List<Student> students = new ArrayList<>();
+    private Set<Student> students = new HashSet<>();
 
     @Override
     public String toString() {
@@ -43,4 +41,12 @@ public class Teacher extends Person{
     }
 
 
+    public void addStudent(Student student) {
+        students.add(student);
+    }
+
+    public void removeStudent(Student student) {
+        this.students.remove(student);
+        student.getTeachers().remove(this);
+    }
 }

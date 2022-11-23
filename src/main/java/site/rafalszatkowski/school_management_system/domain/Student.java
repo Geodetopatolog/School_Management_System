@@ -1,19 +1,18 @@
 package site.rafalszatkowski.school_management_system.domain;
 
 import lombok.*;
-import org.hibernate.Hibernate;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 //@NoArgsConstructor
+//@SuperBuilder
 @Entity
 public class Student extends Person {
 
@@ -32,7 +31,9 @@ public class Student extends Person {
             joinColumns = @JoinColumn(name = "id_student"),
             inverseJoinColumns = @JoinColumn(name = "id_teacher")
     )
-    private List<Teacher> teachers = new ArrayList<>();
+    private Set<Teacher> teachers = new HashSet<>();
+
+
 
     @Override
     public String toString() {
@@ -46,4 +47,14 @@ public class Student extends Person {
                 ", teachers=" + teachers +
                 '}';
     }
+
+    public void addTeacher(Teacher teacher) {
+        teachers.add(teacher);
+    }
+
+    public void removeTeacher(Teacher teacher) {
+        this.teachers.remove(teacher);
+        teacher.getStudents().remove(this);
+    }
+
 }

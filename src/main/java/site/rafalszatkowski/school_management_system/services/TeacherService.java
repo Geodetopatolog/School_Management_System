@@ -11,14 +11,12 @@ public interface TeacherService {
 
     boolean addTeacher(Teacher teacher);
     Optional<Teacher> getTeacher(Long id_teacher);
-    Optional<Teacher> getTeacher(String name, String surname);
     Optional<List<Teacher>> getTeacher(String id, String name, String surname, String email, String age, String degreeCourse);
     boolean updateTeacher(Teacher teacher);
     boolean deleteTeacher(Long id);
-    boolean deleteTeacher(Teacher teacher);
-
     List<Teacher> getAllTeachers();
     Page<Teacher> getAllTeachers(Pageable pageable);
-
+    boolean addTeachersStudent(Long id_teacher, Long id_student);
+    boolean deleteTeachersStudent(Long id_teacher, Long id_student);
 
 }

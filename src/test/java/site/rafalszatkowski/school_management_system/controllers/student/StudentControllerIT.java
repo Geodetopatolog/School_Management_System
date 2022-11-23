@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.controllers;
+package site.rafalszatkowski.school_management_system.controllers.student;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,28 +29,21 @@ class StudentControllerIT {
     private URI createServerAddress(String suffix) throws URISyntaxException {
         return new URI("http://localhost:" + serverPort + suffix);
     }
-    @BeforeAll
-    @Sql (statements = "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Rafał', 'Szatkowski', 'email@email.com', 22, 'kierunek');")
-    static void pupulatedb() {
 
-    }
     @BeforeEach
     void setUp() {
         restTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
     }
 
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     @Sql (statements = "DELETE FROM student WHERE kierunek = 'poprawny';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                        , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxWhenAddStudentSuccessfully() throws URISyntaxException {
         //given
         StudentCreationDTO studentCreationDTO = StudentCreationDTO.builder()
-                .name("Imie1")
-                .surname("Nazwisko1")
+                .name("ImieA")
+                .surname("NazwiskoA")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("poprawny")
@@ -66,42 +59,42 @@ class StudentControllerIT {
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
-
     }
 
     @Test
     void shouldReturn4xxWhenDataNotValidated() throws URISyntaxException {
+
         //given
         StudentCreationDTO wrongName = StudentCreationDTO.builder()
                 .name("I")
-                .surname("Nazwisko1")
+                .surname("NazwiskoA")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("kierunek1")
                 .build();
 
         StudentCreationDTO wrongSurname = StudentCreationDTO.builder()
-                .name("Imie1")
+                .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
                 .age(22)
-                .degreeCourse("kierunek1")
+                .degreeCourse("kierunekA")
                 .build();
 
         StudentCreationDTO wrongEmail = StudentCreationDTO.builder()
-                .name("Imie1")
-                .surname("Nazwisko1")
+                .name("ImieA")
+                .surname("NazwiskoA")
                 .email("aaabb.com")
                 .age(22)
-                .degreeCourse("kierunek1")
+                .degreeCourse("kierunekA")
                 .build();
 
         StudentCreationDTO tooYoung = StudentCreationDTO.builder()
-                .name("Imie1")
-                .surname("Nazwisko1")
+                .name("ImieA")
+                .surname("NazwiskoA")
                 .email("aaa@bbb.com")
                 .age(15)
-                .degreeCourse("kierunek1")
+                .degreeCourse("kierunekA")
                 .build();
 
         //when
@@ -140,19 +133,18 @@ class StudentControllerIT {
         assertEquals("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, wiek < 18 lat lub  niepoprawny adres email", response3.getBody());
         assertTrue(response4.getStatusCode().is4xxClientError());
         assertEquals("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, wiek < 18 lat lub  niepoprawny adres email", response4.getBody());
-
     }
 
     @Test
-    @Sql (statements = "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', 'aaa@bbb.com', 22, 'powtorka')"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql (statements = "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, 'powtorka')"
+                        , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements = "DELETE FROM student WHERE kierunek = 'powtorka';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                        , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn4xxWhenStudentAlreadyExists() throws URISyntaxException {
         //given
         StudentCreationDTO studentCreationDTO = StudentCreationDTO.builder()
-                .name("Imie1")
-                .surname("Nazwisko1")
+                .name("ImieA")
+                .surname("NazwiskoA")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("powtorka")
@@ -172,29 +164,30 @@ class StudentControllerIT {
 
     @Test
     @Sql (statements =
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', '111@bbb.com', 22, '1');" +
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (2, 'Imie1', 'Nazwisko1', '222@bbb.com', 22, '2');" +
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (3, 'Imie2', 'Nazwisko1', '111@bbb.com', 22, '3');" +
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'Imie3', 'Nazwisko2', '222@bbb.com', 22, '1');" +
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (5, 'Imie4', 'Nazwisko3', '111@bbb.com', 32, '1');"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (2, 'ImieA', 'NazwiskoA', '222@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (3, 'ImieB', 'NazwiskoA', '111@bbb.com', 22, '3');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'ImieC', 'NazwiskoB', '222@bbb.com', 22, '1');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (5, 'ImieD', 'NazwiskoC', '111@bbb.com', 32, '1');"
+                    , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-            "DELETE FROM student WHERE id = '1';" +
-            "DELETE FROM student WHERE id = '2';" +
-            "DELETE FROM student WHERE id = '3';" +
-            "DELETE FROM student WHERE id = '4';" +
-            "DELETE FROM student WHERE id = '5';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                    "DELETE FROM student WHERE id = '1';" +
+                    "DELETE FROM student WHERE id = '2';" +
+                    "DELETE FROM student WHERE id = '3';" +
+                    "DELETE FROM student WHERE id = '4';" +
+                    "DELETE FROM student WHERE id = '5';"
+                    , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxAndAllMatchedStudentsWhenQuerySuccessful() throws URISyntaxException {
 
+        //when
         RequestEntity<Void> request1 = RequestEntity
                 .get(createServerAddress("/student/query?id=4"))
                 .build();
         RequestEntity<Void> request2 = RequestEntity
-                .get(createServerAddress("/student/query?name=Imie1"))
+                .get(createServerAddress("/student/query?name=ImieA"))
                 .build();
         RequestEntity<Void> request3 = RequestEntity
-                .get(createServerAddress("/student/query?surname=Nazwisko1"))
+                .get(createServerAddress("/student/query?surname=NazwiskoA"))
                 .build();
         RequestEntity<Void> request4 = RequestEntity
                 .get(createServerAddress("/student/query?email=111@bbb.com"))
@@ -206,12 +199,11 @@ class StudentControllerIT {
                 .get(createServerAddress("/student/query?degreeCourse=1"))
                 .build();
         RequestEntity<Void> request7 = RequestEntity
-                .get(createServerAddress("/student/query?name=Imie1&surname=Nazwisko1"))
+                .get(createServerAddress("/student/query?name=ImieA&surname=NazwiskoA"))
                 .build();
         RequestEntity<Void> request8 = RequestEntity
                 .get(createServerAddress("/student/query?age=22&email=222@bbb.com"))
                 .build();
-
 
         ResponseEntity<List<StudentDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>(){});
         ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
@@ -221,7 +213,6 @@ class StudentControllerIT {
         ResponseEntity<List<StudentDTO>> response6 = restTemplate.exchange(request6, new ParameterizedTypeReference<>(){});
         ResponseEntity<List<StudentDTO>> response7 = restTemplate.exchange(request7, new ParameterizedTypeReference<>(){});
         ResponseEntity<List<StudentDTO>> response8 = restTemplate.exchange(request8, new ParameterizedTypeReference<>(){});
-
 
         //then:
         Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());
@@ -240,66 +231,69 @@ class StudentControllerIT {
         Assertions.assertEquals(2, response7.getBody().size());
         Assertions.assertTrue(response8.getStatusCode().is2xxSuccessful());
         Assertions.assertEquals(2, response8.getBody().size());
-
     }
 
     @Test
     @Sql (statements =
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', '111@bbb.com', 22, '1');"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-            "DELETE FROM student WHERE id = '1';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                    "DELETE FROM student WHERE id = '1';"
+                    , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn4xxWhenStudentNotFound() throws URISyntaxException {
-    //given
+        //when
         RequestEntity<Void> request = RequestEntity
                 .get(createServerAddress("/student/query?id=1000"))
                 .build();
-    //when
+
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
-    //then
+
+        //then
         System.out.println(response.getStatusCodeValue());
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Nie znaleziono wpisów odpowiadających wyszukiwaniu", response.getBody());
-
     }
 
     @Test
     @Sql (statements =
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', '111@bbb.com', 22, '1');"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-            "DELETE FROM student WHERE id = '1';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                    "DELETE FROM student WHERE id = '1';"
+                    , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn4xxWhenQueryParametersNotProvided() throws URISyntaxException {
-        //given
+
+        //when
         RequestEntity<Void> request = RequestEntity
                 .get(createServerAddress("/student/query"))
                 .build();
-        //when
+
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
         //then
         System.out.println(response.getStatusCodeValue());
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Nie wprowadzono parametrów wyszukiwania", response.getBody());
-
     }
 
     @Test
     @Sql (statements =
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', '111@bbb.com', 22, '1');"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql (statements = "DELETE FROM student WHERE kierunek = '1';"
-            , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql (statements =
+                    "DELETE FROM student WHERE kierunek = '1';"
+                    , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxWhenUpdateStudentSuccessfully() throws URISyntaxException {
+
         //given
         StudentDTO studentDTO = StudentDTO.builder()
                 .id_student(1L)
-                .name("Imie2")
-                .surname("Nazwisko2")
+                .name("ImieB")
+                .surname("NazwiskoB")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("1")
+                .numberOfTeachers(0)
                 .build();
 
         //when
@@ -317,20 +311,19 @@ class StudentControllerIT {
 
         //then
         assertTrue(response1.getStatusCode().is2xxSuccessful());
-
         assertTrue(response2.getStatusCode().is2xxSuccessful());
         assertEquals(1, response2.getBody().size());
         assertEquals(response2.getBody().get(0), studentDTO);
-
     }
 
     @Test
     void shouldReturn4xxWhenUpdateStudentNotExists() throws URISyntaxException {
+
         //given
         StudentDTO studentDTO = StudentDTO.builder()
                 .id_student(1L)
-                .name("Imie2")
-                .surname("Nazwisko2")
+                .name("ImieB")
+                .surname("NazwiskoB")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("1")
@@ -347,16 +340,16 @@ class StudentControllerIT {
         //then
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Student, którego dane próbowano uaktualnić, nie występuje w bazie danych", response.getBody());
-
     }
 
     @Test
     void shouldReturn4xxWhenUpdateStudentWithUnvalidatedData() throws URISyntaxException {
+
         //given
         StudentDTO name = StudentDTO.builder()
                 .id_student(1L)
                 .name("I")
-                .surname("Nazwisko2")
+                .surname("NazwiskoB")
                 .email("aaa@bbb.com")
                 .age(22)
                 .degreeCourse("1")
@@ -364,7 +357,7 @@ class StudentControllerIT {
 
         StudentDTO surname = StudentDTO.builder()
                 .id_student(1L)
-                .name("Imie1")
+                .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
                 .age(22)
@@ -373,8 +366,8 @@ class StudentControllerIT {
 
         StudentDTO email = StudentDTO.builder()
                 .id_student(1L)
-                .name("Imie1")
-                .surname("Nazwisko2")
+                .name("ImieA")
+                .surname("NazwiskoB")
                 .email("aaabbb.com")
                 .age(22)
                 .degreeCourse("1")
@@ -382,8 +375,8 @@ class StudentControllerIT {
 
         StudentDTO age = StudentDTO.builder()
                 .id_student(1L)
-                .name("Imie1")
-                .surname("Nazwisko2")
+                .name("ImieA")
+                .surname("NazwiskoB")
                 .email("aaa@bbb.com")
                 .age(11)
                 .degreeCourse("1")
@@ -424,15 +417,13 @@ class StudentControllerIT {
         assertEquals("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, wiek < 18 lat lub  niepoprawny adres email", response3.getBody());
         assertTrue(response4.getStatusCode().is4xxClientError());
         assertEquals("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, wiek < 18 lat lub  niepoprawny adres email", response4.getBody());
-
     }
 
     @Test
     @Sql (statements =
-            "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', '111@bbb.com', 22, '1');"
-            , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldReturn2xxWhenDeleteStudentSuccessfully() throws URISyntaxException {
-        //given
 
         //when
         RequestEntity<Void> request1 = RequestEntity
@@ -451,36 +442,32 @@ class StudentControllerIT {
 
         assertTrue(response2.getStatusCode().is4xxClientError());
         assertEquals("Nie znaleziono wpisów odpowiadających wyszukiwaniu", response2.getBody());
-
     }
 
     @Test
     void shouldReturn4xxWhenDeleteStudentNotExists() throws URISyntaxException {
-        //given
 
         //when
         RequestEntity<Void> request = RequestEntity
                 .delete(createServerAddress("/student?id=1"))
                 .build();
 
-
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         //then
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Student, którego dane próbowano usunąć, nie występuje w bazie danych", response.getBody());
-
     }
 
     @Test
     @Sql (statements =
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'Imie1', 'Nazwisko1', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (2, 'Imie2', 'Nazwisko2', 'aaa@bbb.com', 22, '2');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (3, 'Imie3', 'Nazwisko3', 'aaa@bbb.com', 22, '2');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'Imie4', 'Nazwisko4', 'aaa@bbb.com', 22, '2');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (5, 'Imie5', 'Nazwisko5', 'aaa@bbb.com', 22, '2');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (6, 'Imie6', 'Nazwisko6', 'aaa@bbb.com', 22, '2');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (7, 'Imie7', 'Nazwisko7', 'aaa@bbb.com', 22, '3');"
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (3, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'ImieD', 'NazwiskoD', 'aaa@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (5, 'ImieE', 'NazwiskoE', 'aaa@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (6, 'ImieF', 'NazwiskoF', 'aaa@bbb.com', 22, '2');" +
+                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (7, 'ImieG', 'NazwiskoG', 'aaa@bbb.com', 22, '3');"
             , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
                     "DELETE FROM student WHERE id = 1;" +
@@ -493,21 +480,17 @@ class StudentControllerIT {
             , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturnPageOfStudents() throws URISyntaxException {
 
-
+        //when
         RequestEntity<Void> request = RequestEntity
                 .get(createServerAddress("/student/all?page=0"))
                 .build();
 
         ResponseEntity<List<StudentDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
 
-        //then:
+        //then
         Assertions.assertTrue(response.getStatusCode().is2xxSuccessful());
         Assertions.assertEquals(5, response.getBody().size());
     }
-
-
-
-
 
 
 

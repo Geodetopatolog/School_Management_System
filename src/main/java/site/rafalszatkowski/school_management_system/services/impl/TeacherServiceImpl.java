@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.repositories.StudentRepository;
 import site.rafalszatkowski.school_management_system.repositories.TeacherRepository;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class TeacherServiceImpl implements TeacherService {
 
     final TeacherRepository teacherRepository;
+    final StudentRepository studentRepository;
 
     @Override
     public boolean addTeacher(Teacher teacher) {
@@ -32,12 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Optional<Teacher> getTeacher(Long id_teacher) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Teacher> getTeacher(String name, String surname) {
-        return Optional.empty();
+        return teacherRepository.findById(id_teacher);
     }
 
     @Override
@@ -63,16 +60,15 @@ public class TeacherServiceImpl implements TeacherService {
 
         if (optionalTeacher.isPresent()) {
 
-            teacherRepository.delete(optionalTeacher.get());
+            Teacher teacher = optionalTeacher.get();
+
+            teacher.getStudents().forEach(student -> student.getTeachers().remove(teacher));
+
+            teacherRepository.delete(teacher);
             return true;
         } else {
             return false;
         }
-    }
-
-    @Override
-    public boolean deleteTeacher(Teacher teacher) {
-        return false;
     }
 
     @Override
@@ -84,6 +80,44 @@ public class TeacherServiceImpl implements TeacherService {
     public Page<Teacher> getAllTeachers(Pageable pageable) {
         return teacherRepository.findAll(pageable);
     }
+
+    @Override
+    public boolean addTeachersStudent(Long id_teacher, Long id_student) {
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
+        Optional<Student> optionalStudent = studentRepository.findById(id_student);
+
+        if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
+            Teacher teacher = optionalTeacher.get();
+            Student student = optionalStudent.get();
+
+            teacher.addStudent(student);
+            student.addTeacher(teacher);
+
+            teacherRepository.save(teacher);
+            return true;
+        }
+        else return false;
+    }
+
+    @Override
+    public boolean deleteTeachersStudent(Long id_teacher, Long id_student) {
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
+        Optional<Student> optionalStudent = studentRepository.findById(id_student);
+
+        if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
+            Teacher teacher = optionalTeacher.get();
+            Student student = optionalStudent.get();
+
+            teacher.removeStudent(student);
+            student.removeTeacher(teacher);
+            teacherRepository.save(teacher);
+
+            return true;
+        }
+        else return false;
+    }
+
+
 
 
 }

@@ -17,6 +17,7 @@ public interface TeacherMapper {
     @Mapping(target = "id_teacher", ignore = true)
     Teacher TeacherCreationDtoToTeacher (TeacherCreationDTO teacherCreationDTO);
 
+    @Mapping(target = "numberOfStudents", expression = "java(teacher.getStudents().size())")
     TeacherDTO TeacherToTeacherDto (Teacher teacher);
 
     @Mapping(target = "students", ignore = true)

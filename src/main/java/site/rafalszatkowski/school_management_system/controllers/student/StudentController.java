@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.controllers;
+package site.rafalszatkowski.school_management_system.controllers.student;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.rafalszatkowski.school_management_system.components.Validator;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.mappers.StudentMapper;
@@ -28,13 +29,17 @@ public class StudentController {
     @PostMapping("/student")
     public ResponseEntity<?> addStudent(@RequestBody StudentCreationDTO studentCreationDTO) {
 
-        if (studentCreationDTO.validateData()) {
+        if (Validator.getInstance().validateAllData(
+                studentCreationDTO.getName(),
+                studentCreationDTO.getSurname(),
+                studentCreationDTO.getEmail(),
+                studentCreationDTO.getAge())) {
+
             if (studentService.addStudent(StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO))) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
                 return ResponseEntity.badRequest().body("Student już istnieje w bazie");
             }
-
         } else {
             return ResponseEntity.badRequest().body("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, " +
                     "wiek < 18 lat lub  niepoprawny adres email");
@@ -60,14 +65,16 @@ public class StudentController {
                     return ResponseEntity.status(404).body("Nie znaleziono wpisów odpowiadających wyszukiwaniu");
             }
         }
-
     }
-
 
     @PatchMapping("/student")
     public ResponseEntity<?> updateStudent(@RequestBody StudentDTO studentDTO){
 
-        if (studentDTO.validateData()) {
+        if (Validator.getInstance().validateAllData(
+                studentDTO.getName(),
+                studentDTO.getSurname(),
+                studentDTO.getEmail(),
+                studentDTO.getAge())) {
             Student student = StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO);
 
             if (studentService.updateStudent(student)){
@@ -76,14 +83,11 @@ public class StudentController {
                 return ResponseEntity.badRequest().body("Student, którego dane próbowano uaktualnić, " +
                         "nie występuje w bazie danych");
             }
-
         } else {
             return ResponseEntity.badRequest().body("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, " +
                     "wiek < 18 lat lub  niepoprawny adres email");
         }
-
     }
-
 
     @DeleteMapping("/student")
     public ResponseEntity<?> removeStudent(@RequestParam Long id) {
@@ -96,9 +100,9 @@ public class StudentController {
         }
     }
 
-
     @GetMapping("/student/all")
     public @ResponseBody List<StudentDTO> getAllStudents (@RequestParam Optional<String> page) {
+
         if (page.isPresent()) {
             int currentPage = Integer.parseInt(page.get());
             Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
