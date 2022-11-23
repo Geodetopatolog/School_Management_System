@@ -1,8 +1,6 @@
 package site.rafalszatkowski.school_management_system.datatransfer.mappers;
 
 import org.junit.jupiter.api.Test;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherCreationDTO;
 import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherDTO;
 import site.rafalszatkowski.school_management_system.domain.Student;
@@ -11,7 +9,7 @@ import site.rafalszatkowski.school_management_system.domain.Teacher;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TeacherMapperTest {
 

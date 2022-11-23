@@ -249,7 +249,7 @@ class StudentControllerIT {
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         //then
-        System.out.println(response.getStatusCodeValue());
+
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Nie znaleziono wpisów odpowiadających wyszukiwaniu", response.getBody());
     }
@@ -271,7 +271,6 @@ class StudentControllerIT {
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         //then
-        System.out.println(response.getStatusCodeValue());
         assertTrue(response.getStatusCode().is4xxClientError());
         assertEquals("Nie wprowadzono parametrów wyszukiwania", response.getBody());
     }

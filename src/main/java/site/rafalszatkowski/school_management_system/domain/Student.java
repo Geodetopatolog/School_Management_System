@@ -1,7 +1,9 @@
 package site.rafalszatkowski.school_management_system.domain;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -11,8 +13,6 @@ import java.util.Set;
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
-//@NoArgsConstructor
-//@SuperBuilder
 @Entity
 public class Student extends Person {
 

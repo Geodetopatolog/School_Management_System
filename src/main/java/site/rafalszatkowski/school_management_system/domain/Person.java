@@ -1,14 +1,14 @@
 package site.rafalszatkowski.school_management_system.domain;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-@Data
-//@SuperBuilder
+@Getter
+@Setter
 @NoArgsConstructor
 @MappedSuperclass
 public class Person {
