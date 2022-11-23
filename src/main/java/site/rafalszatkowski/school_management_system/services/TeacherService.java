@@ -2,6 +2,7 @@ package site.rafalszatkowski.school_management_system.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface TeacherService {
     boolean deleteTeacher(Long id);
     List<Teacher> getAllTeachers();
     Page<Teacher> getAllTeachers(Pageable pageable);
+    List<Teacher> getAllTeachers(Sort sort);
     boolean addTeachersStudent(Long id_teacher, Long id_student);
     boolean deleteTeachersStudent(Long id_teacher, Long id_student);
 

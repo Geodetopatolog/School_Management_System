@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -101,15 +102,49 @@ public class StudentController {
     }
 
     @GetMapping("/student/all")
-    public @ResponseBody List<StudentDTO> getAllStudents (@RequestParam Optional<String> page) {
+    public @ResponseBody List<StudentDTO> getAllStudents (@RequestParam Optional<String> page,
+                                                          @RequestParam Optional<String> sortBy,
+                                                          @RequestParam(defaultValue = "false") String descending
+                                                          ) {
 
-        if (page.isPresent()) {
-            int currentPage = Integer.parseInt(page.get());
-            Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
-            Page<Student> students = studentService.getAllStudents(pageRequest);
-            return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
-        } else {
-            return StudentMapper.INSTANCE.StudentsToStudentDtos(studentService.getAllStudents());
+        if (sortBy.isPresent()) {
+            if (page.isPresent()) {
+                //strony i sortowanie
+                int currentPage = Integer.parseInt(page.get());
+                Sort sortOrder;
+                Pageable pageRequest;
+                if (descending.equals("false")) {
+                    sortOrder = Sort.by(sortBy.get()).ascending();
+                } else {
+                    sortOrder = Sort.by(sortBy.get()).descending();
+                }
+                pageRequest = PageRequest.of(currentPage, PAGE_SIZE, sortOrder);
+                Page<Student> students = studentService.getAllStudents(pageRequest);
+                return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
+
+            } else {
+                //samo sortowanie
+                Sort sortOrder;
+                if (descending.equals("false")) {
+                    sortOrder = Sort.by(sortBy.get()).ascending();
+                } else {
+                    sortOrder = Sort.by(sortBy.get()).descending();
+                }
+                return StudentMapper.INSTANCE.StudentsToStudentDtos(studentService.getAllStudents(sortOrder));
+            }
+        }
+         else {
+            if (page.isPresent()) {
+                //same strony
+                int currentPage = Integer.parseInt(page.get());
+                Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
+                Page<Student> students = studentService.getAllStudents(pageRequest);
+                return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
+            } else {
+                //bez niczego
+                return StudentMapper.INSTANCE.StudentsToStudentDtos(studentService.getAllStudents());
+            }
+
         }
     }
 

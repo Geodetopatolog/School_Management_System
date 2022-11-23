@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,6 @@ public class TeacherController {
                 return ResponseEntity.status(404).body("Nie znaleziono wpisów odpowiadających wyszukiwaniu");
             }
         }
-
     }
 
 
@@ -90,7 +90,6 @@ public class TeacherController {
             return ResponseEntity.badRequest().body("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, " +
                     "wiek < 18 lat lub  niepoprawny adres email");
         }
-
     }
 
 
@@ -107,17 +106,49 @@ public class TeacherController {
 
 
     @GetMapping("/teacher/all")
-    public @ResponseBody List<TeacherDTO> getAllTeachers (@RequestParam Optional<String> page) {
-        if (page.isPresent()) {
-            int currentPage = Integer.parseInt(page.get());
-            Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
-            Page<Teacher> teachers = teacherService.getAllTeachers(pageRequest);
-            return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teachers.getContent());
-        } else {
-            return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teacherService.getAllTeachers());
+    public @ResponseBody List<TeacherDTO> getAllTeachers (@RequestParam Optional<String> page,
+                                                          @RequestParam Optional<String> sortBy,
+                                                          @RequestParam(defaultValue = "false") String descending
+    ) {
+        if (sortBy.isPresent()) {
+            if (page.isPresent()) {
+                //strony i sortowanie
+                int currentPage = Integer.parseInt(page.get());
+                Sort sortOrder;
+                Pageable pageRequest;
+                if (descending.equals("false")) {
+                    sortOrder = Sort.by(sortBy.get()).ascending();
+                } else {
+                    sortOrder = Sort.by(sortBy.get()).descending();
+                }
+                pageRequest = PageRequest.of(currentPage, PAGE_SIZE, sortOrder);
+                Page<Teacher> teachers = teacherService.getAllTeachers(pageRequest);
+                return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teachers.getContent());
+
+            } else {
+                //samo sortowanie
+                Sort sortOrder;
+                if (descending.equals("false")) {
+                    sortOrder = Sort.by(sortBy.get()).ascending();
+                } else {
+                    sortOrder = Sort.by(sortBy.get()).descending();
+                }
+                return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teacherService.getAllTeachers(sortOrder));
+            }
+        }
+        else {
+            if (page.isPresent()) {
+                //same strony
+                int currentPage = Integer.parseInt(page.get());
+                Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
+                Page<Teacher> teachers = teacherService.getAllTeachers(pageRequest);
+                return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teachers.getContent());
+            } else {
+                //bez niczego
+                return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teacherService.getAllTeachers());
+            }
         }
     }
-
 
 
 

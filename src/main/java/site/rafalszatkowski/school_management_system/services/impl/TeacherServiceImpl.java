@@ -3,6 +3,7 @@ package site.rafalszatkowski.school_management_system.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
@@ -80,6 +81,11 @@ public class TeacherServiceImpl implements TeacherService {
     public Page<Teacher> getAllTeachers(Pageable pageable) {
         return teacherRepository.findAll(pageable);
     }
+    @Override
+    public List<Teacher> getAllTeachers(Sort sort) {
+        return (List<Teacher>) teacherRepository.findAll(sort);
+    }
+
 
     @Override
     public boolean addTeachersStudent(Long id_teacher, Long id_student) {
