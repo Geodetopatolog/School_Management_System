@@ -19,7 +19,7 @@ public class Teacher extends Person{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Long id_teacher;
+    private Long idTeacher;
 
     @Column(name = "Przedmiot")
     private String schoolSubject;
@@ -30,13 +30,13 @@ public class Teacher extends Person{
     @Override
     public String toString() {
         return "Teacher{" +
-                "id_student=" + id_teacher +
+                "idTeacher=" + idTeacher +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 ", age='" + getAge() + '\'' +
-                ", degreeCourse='" + schoolSubject + '\'' +
-                ", teachers=" + students +
+                ", schoolSubject='" + schoolSubject + '\'' +
+                ", students=" + students +
                 '}';
     }
 

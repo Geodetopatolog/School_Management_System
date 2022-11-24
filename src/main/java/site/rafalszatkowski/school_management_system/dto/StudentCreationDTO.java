@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.datatransfer.dtos;
+package site.rafalszatkowski.school_management_system.dto;
 
 
 import lombok.Builder;

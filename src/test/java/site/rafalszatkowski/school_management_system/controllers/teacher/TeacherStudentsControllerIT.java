@@ -11,8 +11,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
+import site.rafalszatkowski.school_management_system.dto.StudentDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 class TeacherStudentsControllerIT {
 
     @LocalServerPort
@@ -46,11 +48,11 @@ class TeacherStudentsControllerIT {
     void shouldReturn2xxWhenAddStudentToTeacherSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_teacher=1&id_student=2"))
+                .patch(createServerAddress("/teacher/student?idTeacher=1&idStudent=2"))
                 .build();
 
         RequestEntity<Void> request2 = RequestEntity
-                .get(createServerAddress("/teacher/student?id_teacher=1"))
+                .get(createServerAddress("/teacher/student?idTeacher=1"))
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
@@ -70,23 +72,23 @@ class TeacherStudentsControllerIT {
     void shouldReturn4xxWhenAddStudentToTeacherUnsuccesfully() throws URISyntaxException {
         //when
         RequestEntity<Void> wrongStudent = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_teacher=9&id_student=1000"))
+                .patch(createServerAddress("/teacher/student?idTeacher=9&idStudent=1000"))
                 .build();
 
         RequestEntity<Void> wrongTeacher = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_teacher=1000&id_student=10"))
+                .patch(createServerAddress("/teacher/student?idTeacher=1000&idStudent=10"))
                 .build();
 
         RequestEntity<Void> bothWrong = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_teacher=1000&id_student=1000"))
+                .patch(createServerAddress("/teacher/student?idTeacher=1000&idStudent=1000"))
                 .build();
 
         RequestEntity<Void> noStudentID = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_teacher=1000"))
+                .patch(createServerAddress("/teacher/student?idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> noTeacherID = RequestEntity
-                .patch(createServerAddress("/teacher/student?id_student=1000"))
+                .patch(createServerAddress("/teacher/student?idStudent=1000"))
                 .build();
 
         RequestEntity<Void> noIDs = RequestEntity
@@ -127,7 +129,7 @@ class TeacherStudentsControllerIT {
     void shouldReturn2xxAndListOfTeacherStudentsWhenGetDataSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .get(createServerAddress("/teacher/student?id_teacher=3"))
+                .get(createServerAddress("/teacher/student?idTeacher=3"))
                 .build();
 
         ResponseEntity<List<StudentDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
@@ -141,7 +143,7 @@ class TeacherStudentsControllerIT {
     void shouldReturn4xxWhenGetDataUnsuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .get(createServerAddress("/teacher/student?id_teacher=1000"))
+                .get(createServerAddress("/teacher/student?idTeacher=1000"))
                 .build();
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
@@ -160,11 +162,11 @@ class TeacherStudentsControllerIT {
     void shouldReturn2xxWhenRemoveTeachersStudentSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_teacher=5&id_student=6"))
+                .delete(createServerAddress("/teacher/student?idTeacher=5&idStudent=6"))
                 .build();
 
         RequestEntity<Void> request2 = RequestEntity
-                .get(createServerAddress("/teacher/student?id_teacher=5"))
+                .get(createServerAddress("/teacher/student?idTeacher=5"))
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
@@ -185,23 +187,23 @@ class TeacherStudentsControllerIT {
     void shouldReturn4xxWhenRemoveStudentFromTeacherUnsuccesfully() throws URISyntaxException {
         //when
         RequestEntity<Void> wrongStudent = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_teacher=7&id_student=1000"))
+                .delete(createServerAddress("/teacher/student?idTeacher=7&idStudent=1000"))
                 .build();
 
         RequestEntity<Void> wrongTeacher = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_teacher=1000&id_student=8"))
+                .delete(createServerAddress("/teacher/student?idTeacher=1000&idStudent=8"))
                 .build();
 
         RequestEntity<Void> bothWrong = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_teacher=1000&id_student=1000"))
+                .delete(createServerAddress("/teacher/student?idTeacher=1000&idStudent=1000"))
                 .build();
 
         RequestEntity<Void> noStudentID = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_teacher=1000"))
+                .delete(createServerAddress("/teacher/student?idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> noTeacherID = RequestEntity
-                .delete(createServerAddress("/teacher/student?id_student=1000"))
+                .delete(createServerAddress("/teacher/student?idStudent=1000"))
                 .build();
 
         RequestEntity<Void> noIDs = RequestEntity

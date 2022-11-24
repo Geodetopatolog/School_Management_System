@@ -9,8 +9,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
+import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
+import site.rafalszatkowski.school_management_system.dto.StudentDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -286,7 +286,7 @@ class StudentControllerIT {
 
         //given
         StudentDTO studentDTO = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -320,7 +320,7 @@ class StudentControllerIT {
 
         //given
         StudentDTO studentDTO = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -346,7 +346,7 @@ class StudentControllerIT {
 
         //given
         StudentDTO name = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("I")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -355,7 +355,7 @@ class StudentControllerIT {
                 .build();
 
         StudentDTO surname = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
@@ -364,7 +364,7 @@ class StudentControllerIT {
                 .build();
 
         StudentDTO email = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
                 .email("aaabbb.com")
@@ -373,7 +373,7 @@ class StudentControllerIT {
                 .build();
 
         StudentDTO age = StudentDTO.builder()
-                .id_student(1L)
+                .idStudent(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")

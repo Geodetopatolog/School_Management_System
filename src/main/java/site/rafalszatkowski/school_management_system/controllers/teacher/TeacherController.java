@@ -9,16 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.rafalszatkowski.school_management_system.components.Validator;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.mappers.TeacherMapper;
+import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
+import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
+import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class TeacherController {
@@ -78,6 +77,8 @@ public class TeacherController {
                 teacherDTO.getEmail(),
                 teacherDTO.getAge())) {
             Teacher teacher = TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacherDTO);
+
+            System.out.println(teacher);
 
             if (teacherService.updateTeacher(teacher)){
                 return ResponseEntity.status(HttpStatus.ACCEPTED).build();

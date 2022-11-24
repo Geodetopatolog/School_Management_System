@@ -3,8 +3,8 @@ package site.rafalszatkowski.school_management_system.controllers.student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.mappers.TeacherMapper;
+import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
+import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
 import site.rafalszatkowski.school_management_system.services.StudentService;
@@ -19,9 +19,9 @@ public class StudentTeachersController {
     private final StudentService studentService;
 
     @GetMapping("/student/teacher")
-    public ResponseEntity<?> getStudentsTeacher(@RequestParam Long id_student) {
+    public ResponseEntity<?> getStudentsTeacher(@RequestParam Long idStudent) {
 
-        Optional<Student> optionalStudent = studentService.getStudent(id_student);
+        Optional<Student> optionalStudent = studentService.getStudent(idStudent);
 
 
         if (optionalStudent.isPresent()) {
@@ -35,10 +35,10 @@ public class StudentTeachersController {
     }
 
     @PatchMapping("/student/teacher")
-    public ResponseEntity<?> addStudentsTeacher(Long id_student, Long id_teacher) {
+    public ResponseEntity<?> addStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        if (id_student != null && id_teacher != null) {
-            boolean anyTeacherAdded = studentService.addStudentsTeacher(id_student, id_teacher);
+        if (idStudent != null && idTeacher != null) {
+            boolean anyTeacherAdded = studentService.addStudentsTeacher(idStudent, idTeacher);
             if (anyTeacherAdded) {
                 return ResponseEntity.accepted().build();
             }
@@ -49,10 +49,10 @@ public class StudentTeachersController {
     }
 
     @DeleteMapping("/student/teacher")
-    public ResponseEntity<?> deleteStudentsTeacher(Long id_student, Long id_teacher) {
+    public ResponseEntity<?> deleteStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        if (id_student != null && id_teacher != null) {
-            boolean anyTeacherRemoved = studentService.deleteStudentsTeacher(id_student, id_teacher);
+        if (idStudent != null && idTeacher != null) {
+            boolean anyTeacherRemoved = studentService.deleteStudentsTeacher(idStudent, idTeacher);
             if (anyTeacherRemoved) {
                 return ResponseEntity.ok().build();
             }

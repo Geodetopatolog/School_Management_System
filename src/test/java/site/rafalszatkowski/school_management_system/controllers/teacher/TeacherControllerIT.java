@@ -14,9 +14,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.TeacherDTO;
+import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
+import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -290,7 +289,7 @@ class TeacherControllerIT {
 
         //given
         TeacherDTO teacherDTO = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -298,6 +297,8 @@ class TeacherControllerIT {
                 .schoolSubject("1")
                 .numberOfStudents(0)
                 .build();
+
+        System.out.println(teacherDTO);
 
         //when
         RequestEntity<TeacherDTO> request1 = RequestEntity
@@ -324,7 +325,7 @@ class TeacherControllerIT {
 
         //given
         TeacherDTO teacherDTO = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -350,7 +351,7 @@ class TeacherControllerIT {
 
         //given
         TeacherDTO name = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("I")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -359,7 +360,7 @@ class TeacherControllerIT {
                 .build();
 
         TeacherDTO surname = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
@@ -368,7 +369,7 @@ class TeacherControllerIT {
                 .build();
 
         TeacherDTO email = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
                 .email("aaabbb.com")
@@ -377,7 +378,7 @@ class TeacherControllerIT {
                 .build();
 
         TeacherDTO age = TeacherDTO.builder()
-                .id_teacher(1L)
+                .idTeacher(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
                 .email("aaa@bbb.com")
@@ -509,6 +510,8 @@ class TeacherControllerIT {
         ResponseEntity<List<TeacherDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
         ResponseEntity<List<TeacherDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
         ResponseEntity<List<TeacherDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
+
+        System.out.println(response1.getBody());
 
         //then
         Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());

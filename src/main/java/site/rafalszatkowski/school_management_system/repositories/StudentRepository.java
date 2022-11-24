@@ -17,7 +17,7 @@ public interface StudentRepository extends CrudRepository<Student,Long>, PagingA
                                     @Param("queryEmail") String email,
                                     @Param("queryAge") Integer age);
 
-    @Query("select s from Student s where cast(s.id_student as string) like :queryId and s.name like :queryName and s.surname like :querySurname and s.email like :queryEmail and cast(s.age as string) like :queryAge and s.degreeCourse like :queryDegreeCourse")
+    @Query("select s from Student s where cast(s.idStudent as string) like :queryId and s.name like :queryName and s.surname like :querySurname and s.email like :queryEmail and cast(s.age as string) like :queryAge and s.degreeCourse like :queryDegreeCourse")
     Optional<List<Student>> getStudentsBySpecificData(@Param("queryId") String id,
                                                       @Param("queryName") String name,
                                                       @Param("querySurname") String surname,

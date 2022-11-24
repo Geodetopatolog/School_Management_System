@@ -34,8 +34,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Optional<Teacher> getTeacher(Long id_teacher) {
-        return teacherRepository.findById(id_teacher);
+    public Optional<Teacher> getTeacher(Long idTeacher) {
+        return teacherRepository.findById(idTeacher);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public boolean updateTeacher(Teacher teacher) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(teacher.getId_teacher());
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(teacher.getIdTeacher());
 
         if (optionalTeacher.isPresent()){
             teacherRepository.save(teacher);
@@ -88,9 +88,9 @@ public class TeacherServiceImpl implements TeacherService {
 
 
     @Override
-    public boolean addTeachersStudent(Long id_teacher, Long id_student) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
-        Optional<Student> optionalStudent = studentRepository.findById(id_student);
+    public boolean addTeachersStudent(Long idTeacher, Long idStudent) {
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
 
         if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
             Teacher teacher = optionalTeacher.get();
@@ -106,9 +106,9 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public boolean deleteTeachersStudent(Long id_teacher, Long id_student) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
-        Optional<Student> optionalStudent = studentRepository.findById(id_student);
+    public boolean deleteTeachersStudent(Long idTeacher, Long idStudent) {
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
 
         if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
             Teacher teacher = optionalTeacher.get();

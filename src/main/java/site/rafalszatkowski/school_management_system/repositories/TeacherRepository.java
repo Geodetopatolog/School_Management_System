@@ -17,7 +17,7 @@ public interface TeacherRepository extends CrudRepository<Teacher,Long>, PagingA
                                           @Param("queryEmail") String email,
                                           @Param("queryAge") Integer age);
 
-    @Query("select t from Teacher t where cast(t.id_teacher as string) like :queryId and t.name like :queryName and t.surname like :querySurname and t.email like :queryEmail and cast(t.age as string) like :queryAge and t.schoolSubject like :querySchoolSubject")
+    @Query("select t from Teacher t where cast(t.idTeacher as string) like :queryId and t.name like :queryName and t.surname like :querySurname and t.email like :queryEmail and cast(t.age as string) like :queryAge and t.schoolSubject like :querySchoolSubject")
     Optional<List<Teacher>> getTeacherBySpecificData(@Param("queryId") String id,
                                                       @Param("queryName") String name,
                                                       @Param("querySurname") String surname,

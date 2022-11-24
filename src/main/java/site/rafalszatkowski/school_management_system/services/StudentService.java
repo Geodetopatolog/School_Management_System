@@ -11,14 +11,14 @@ import java.util.Optional;
 public interface StudentService {
 
     boolean addStudent(Student student);
-    Optional<Student> getStudent(Long id_student);
+    Optional<Student> getStudent(Long idStudent);
     boolean updateStudent(Student student);
     boolean deleteStudent(Long id);
     List<Student> getAllStudents();
     Page<Student> getAllStudents(Pageable pageable);
     List<Student> getAllStudents(Sort sort);
     Optional<List<Student>> getStudent(String id, String name, String surname, String email, String age, String degreeCourse);
-    boolean addStudentsTeacher(Long id_teacher, Long id_student);
-    boolean deleteStudentsTeacher(Long id_teacher, Long id_student);
+    boolean addStudentsTeacher(Long idTeacher, Long idStudent);
+    boolean deleteStudentsTeacher(Long idTeacher, Long idStudent);
 
 }

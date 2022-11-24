@@ -1,17 +1,19 @@
 package site.rafalszatkowski.school_management_system.datatransfer.mappers;
 
 import org.junit.jupiter.api.Test;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
+import org.springframework.test.annotation.DirtiesContext;
+import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
+import site.rafalszatkowski.school_management_system.dto.StudentDTO;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+@DirtiesContext
 class StudentMapperTest {
 
     @Test

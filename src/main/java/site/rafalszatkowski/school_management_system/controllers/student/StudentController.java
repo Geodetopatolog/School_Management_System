@@ -9,16 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.rafalszatkowski.school_management_system.components.Validator;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.dtos.StudentDTO;
-import site.rafalszatkowski.school_management_system.datatransfer.mappers.StudentMapper;
+import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
+import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.services.StudentService;
 
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
 @RestController
 @RequiredArgsConstructor
 public class StudentController {

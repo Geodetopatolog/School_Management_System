@@ -34,8 +34,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Optional<Student> getStudent(Long id_student) {
-        return studentRepository.findById(id_student);
+    public Optional<Student> getStudent(Long idStudent) {
+        return studentRepository.findById(idStudent);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean updateStudent(Student student) {
-        Optional<Student> optionalStudent = studentRepository.findById(student.getId_student());
+        Optional<Student> optionalStudent = studentRepository.findById(student.getIdStudent());
 
         if (optionalStudent.isPresent()){
             studentRepository.save(student);
@@ -86,10 +86,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean addStudentsTeacher(Long id_student, Long id_teacher) {
+    public boolean addStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        Optional<Student> optionalStudent = studentRepository.findById(id_student);
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
+        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
 
         if (optionalStudent.isPresent() && optionalTeacher.isPresent()) {
 
@@ -106,10 +106,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public boolean deleteStudentsTeacher(Long id_student, Long id_teacher) {
+    public boolean deleteStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        Optional<Student> optionalStudent = studentRepository.findById(id_student);
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(id_teacher);
+        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
+        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
 
         if (optionalStudent.isPresent() && optionalTeacher.isPresent()) {
 

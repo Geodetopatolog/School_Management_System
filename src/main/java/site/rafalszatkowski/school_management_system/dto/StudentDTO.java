@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.datatransfer.dtos;
+package site.rafalszatkowski.school_management_system.dto;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class StudentDTO {
 
-    private Long id_student;
+    private Long idStudent;
     private String name;
     private String surname;
     private Integer age;

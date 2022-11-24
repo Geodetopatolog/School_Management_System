@@ -17,7 +17,7 @@ public class Student extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
-    private Long id_student;
+    private Long idStudent;
 
     @Column(name = "Kierunek")
     private String degreeCourse;
@@ -25,8 +25,8 @@ public class Student extends Person {
     @ManyToMany
     @JoinTable(
             name = "teachers_students_relations",
-            joinColumns = @JoinColumn(name = "id_student"),
-            inverseJoinColumns = @JoinColumn(name = "id_teacher")
+            joinColumns = @JoinColumn(name = "idStudent"),
+            inverseJoinColumns = @JoinColumn(name = "idTeacher")
     )
     private Set<Teacher> teachers = new HashSet<>();
 
@@ -35,7 +35,7 @@ public class Student extends Person {
     @Override
     public String toString() {
         return "Student{" +
-                "id_student=" + id_student +
+                "idStudent=" + idStudent +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", email='" + getEmail() + '\'' +
