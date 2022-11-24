@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.controllers.teacher;
+package site.rafalszatkowski.school_management_system.controllers.student;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,17 +13,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext
-class TeacherStudentsControllerIT {
+class StudentEntityTeachersControllerIT {
 
     @LocalServerPort
     private int serverPort;
@@ -42,21 +42,21 @@ class TeacherStudentsControllerIT {
 
     @Test
     @Sql(statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student_entity (id, imię, nazwisko, email, wiek, kierunek) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void shouldReturn2xxWhenAddStudentToTeacherSuccessfully() throws URISyntaxException {
+    void shouldReturn2xxWhenAddTeacherToStudentSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .patch(createServerAddress("/teacher/student?idTeacher=1&idStudent=2"))
+                .patch(createServerAddress("/student/teacher?idStudent=2&idTeacher=1"))
                 .build();
 
         RequestEntity<Void> request2 = RequestEntity
-                .get(createServerAddress("/teacher/student?idTeacher=1"))
+                .get(createServerAddress("/student/teacher?idStudent=2"))
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -66,33 +66,33 @@ class TeacherStudentsControllerIT {
 
     @Test
     @Sql(statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (9, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (10, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (9, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student_entity (id, imię, nazwisko, email, wiek, kierunek) values (10, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void shouldReturn4xxWhenAddStudentToTeacherUnsuccesfully() throws URISyntaxException {
+    void shouldReturn4xxWhenAddTeacherToStudentUnsuccesfully() throws URISyntaxException {
         //when
         RequestEntity<Void> wrongStudent = RequestEntity
-                .patch(createServerAddress("/teacher/student?idTeacher=9&idStudent=1000"))
+                .patch(createServerAddress("/student/teacher?idStudent=1000&idTeacher=9"))
                 .build();
 
         RequestEntity<Void> wrongTeacher = RequestEntity
-                .patch(createServerAddress("/teacher/student?idTeacher=1000&idStudent=10"))
+                .patch(createServerAddress("/student/teacher?idStudent=10&idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> bothWrong = RequestEntity
-                .patch(createServerAddress("/teacher/student?idTeacher=1000&idStudent=1000"))
+                .patch(createServerAddress("/student/teacher?idStudent=1000&idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> noStudentID = RequestEntity
-                .patch(createServerAddress("/teacher/student?idTeacher=1000"))
+                .patch(createServerAddress("/student/teacher?idTeacher=9"))
                 .build();
 
         RequestEntity<Void> noTeacherID = RequestEntity
-                .patch(createServerAddress("/teacher/student?idStudent=1000"))
+                .patch(createServerAddress("/student/teacher?idStudent=10"))
                 .build();
 
         RequestEntity<Void> noIDs = RequestEntity
-                .patch(createServerAddress("/teacher/student"))
+                .patch(createServerAddress("/student/teacher"))
                 .build();
 
         ResponseEntity<String> response1 = restTemplate.exchange(wrongStudent, String.class);
@@ -120,19 +120,19 @@ class TeacherStudentsControllerIT {
 
     @Test
     @Sql(statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (4, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (12, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 11, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (12, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student_entity (id, imię, nazwisko, email, wiek, kierunek) values (4, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 11, '1');" +
                     "insert into teachers_students_relations (id_student, id_teacher) values (4, 3);" +
-                    "insert into teachers_students_relations (id_student, id_teacher) values (12, 3);"
+                    "insert into teachers_students_relations (id_student, id_teacher) values (4, 12);"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void shouldReturn2xxAndListOfTeacherStudentsWhenGetDataSuccessfully() throws URISyntaxException {
+    void shouldReturn2xxAndListOfStudentTeachersWhenGetDataSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .get(createServerAddress("/teacher/student?idTeacher=3"))
+                .get(createServerAddress("/student/teacher?idStudent=4"))
                 .build();
 
-        ResponseEntity<List<StudentDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<TeacherDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -143,34 +143,35 @@ class TeacherStudentsControllerIT {
     void shouldReturn4xxWhenGetDataUnsuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .get(createServerAddress("/teacher/student?idTeacher=1000"))
+                .get(createServerAddress("/student/teacher?idStudent=1000"))
                 .build();
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         //then
         assertTrue(response.getStatusCode().is4xxClientError());
-        assertEquals("Nauczyciel nie występuje w bazie", response.getBody());
+        assertEquals("StudentEntity nie występuje w bazie", response.getBody());
     }
 
     @Test
     @Sql(statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (6, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student_entity (id, imię, nazwisko, email, wiek, kierunek) values (6, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');" +
                     "insert into teachers_students_relations (id_student, id_teacher) values (6, 5);"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void shouldReturn2xxWhenRemoveTeachersStudentSuccessfully() throws URISyntaxException {
+    void shouldReturn2xxWhenRemoveStudentsTeacherSuccessfully() throws URISyntaxException {
         //when
         RequestEntity<Void> request = RequestEntity
-                .delete(createServerAddress("/teacher/student?idTeacher=5&idStudent=6"))
+                .delete(createServerAddress("/student/teacher?idStudent=6&idTeacher=5"))
                 .build();
 
         RequestEntity<Void> request2 = RequestEntity
-                .get(createServerAddress("/teacher/student?idTeacher=5"))
+                .get(createServerAddress("/student/teacher?idStudent=6"))
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+
+        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -181,33 +182,34 @@ class TeacherStudentsControllerIT {
 
     @Test
     @Sql(statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
-                    "insert into student (id, imię, nazwisko, email, wiek, kierunek) values (8, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, '1');" +
+                    "insert into student_entity (id, imię, nazwisko, email, wiek, kierunek) values (8, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 11, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    void shouldReturn4xxWhenRemoveStudentFromTeacherUnsuccesfully() throws URISyntaxException {
+    void shouldReturn4xxWhenRemoveTeacherFromStudentUnsuccesfully() throws URISyntaxException {
+
         //when
         RequestEntity<Void> wrongStudent = RequestEntity
-                .delete(createServerAddress("/teacher/student?idTeacher=7&idStudent=1000"))
+                .delete(createServerAddress("/student/teacher?idStudent=1000&idTeacher=8"))
                 .build();
 
         RequestEntity<Void> wrongTeacher = RequestEntity
-                .delete(createServerAddress("/teacher/student?idTeacher=1000&idStudent=8"))
+                .delete(createServerAddress("/student/teacher?idStudent=7&idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> bothWrong = RequestEntity
-                .delete(createServerAddress("/teacher/student?idTeacher=1000&idStudent=1000"))
+                .delete(createServerAddress("/student/teacher?idStudent=1000&idTeacher=1000"))
                 .build();
 
         RequestEntity<Void> noStudentID = RequestEntity
-                .delete(createServerAddress("/teacher/student?idTeacher=1000"))
+                .delete(createServerAddress("/student/teacher?idTeacher=8"))
                 .build();
 
         RequestEntity<Void> noTeacherID = RequestEntity
-                .delete(createServerAddress("/teacher/student?idStudent=1000"))
+                .delete(createServerAddress("/student/teacher?idStudent=7"))
                 .build();
 
         RequestEntity<Void> noIDs = RequestEntity
-                .delete(createServerAddress("/teacher/student"))
+                .delete(createServerAddress("/student/teacher"))
                 .build();
 
         ResponseEntity<String> response1 = restTemplate.exchange(wrongStudent, String.class);
@@ -230,11 +232,7 @@ class TeacherStudentsControllerIT {
         assertEquals("Niekompletne dane", response4.getBody());
         assertEquals("Niekompletne dane", response5.getBody());
         assertEquals("Niekompletne dane", response6.getBody());
+
     }
-
-
-
-
-
 
 }

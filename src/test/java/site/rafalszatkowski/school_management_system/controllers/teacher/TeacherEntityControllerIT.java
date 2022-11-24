@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TeacherControllerIT {
+class TeacherEntityControllerIT {
 
     @AfterEach
     void tearDown() {
@@ -46,7 +46,7 @@ class TeacherControllerIT {
 
     @Test
     @Sql(statements =
-                    "DELETE FROM teacher WHERE przedmiot = 'poprawny';"
+                    "DELETE FROM teacher_entity WHERE przedmiot = 'poprawny';"
                     , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxWhenAddTeacherSuccessfully() throws URISyntaxException {
 
@@ -146,10 +146,10 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, 'powtorka')"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 22, 'powtorka')"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-                    "DELETE FROM teacher WHERE przedmiot = 'powtorka';"
+                    "DELETE FROM teacher_entity WHERE przedmiot = 'powtorka';"
                     , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn4xxWhenTeacherAlreadyExists() throws URISyntaxException {
 
@@ -177,18 +177,18 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieA', 'NazwiskoA', '222@bbb.com', 22, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieB', 'NazwiskoA', '111@bbb.com', 22, '3');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieC', 'NazwiskoB', '222@bbb.com', 22, '1');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieD', 'NazwiskoC', '111@bbb.com', 32, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieA', 'NazwiskoA', '222@bbb.com', 22, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieB', 'NazwiskoA', '111@bbb.com', 22, '3');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieC', 'NazwiskoB', '222@bbb.com', 22, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieD', 'NazwiskoC', '111@bbb.com', 32, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-                    "DELETE FROM teacher WHERE id = '1';" +
-                    "DELETE FROM teacher WHERE id = '2';" +
-                    "DELETE FROM teacher WHERE id = '3';" +
-                    "DELETE FROM teacher WHERE id = '4';" +
-                    "DELETE FROM teacher WHERE id = '5';"
+                    "DELETE FROM teacher_entity WHERE id = '1';" +
+                    "DELETE FROM teacher_entity WHERE id = '2';" +
+                    "DELETE FROM teacher_entity WHERE id = '3';" +
+                    "DELETE FROM teacher_entity WHERE id = '4';" +
+                    "DELETE FROM teacher_entity WHERE id = '5';"
                     , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxAndAllMatchedTeachersWhenQuerySuccessful() throws URISyntaxException {
 
@@ -280,10 +280,10 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-                    "DELETE FROM teacher WHERE id = 1;"
+                    "DELETE FROM teacher_entity WHERE id = 1;"
                     , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxWhenUpdateTeacherSuccessfully() throws URISyntaxException {
 
@@ -425,7 +425,7 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieA', 'NazwiskoA', '111@bbb.com', 22, '1');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void shouldReturn2xxWhenDeleteTeacherSuccessfully() throws URISyntaxException {
 
@@ -465,22 +465,22 @@ class TeacherControllerIT {
 
     @Test
     @Sql (statements =
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 22, '1');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 21, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 23, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieD', 'NazwiskoD', 'aaa@bbb.com', 25, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieE', 'NazwiskoE', 'aaa@bbb.com', 27, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (6, 'ImieF', 'NazwiskoF', 'aaa@bbb.com', 24, '2');" +
-                    "insert into teacher (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieG', 'NazwiskoG', 'aaa@bbb.com', 26, '3');"
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (1, 'ImieC', 'NazwiskoC', 'aaa@bbb.com', 22, '1');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (2, 'ImieB', 'NazwiskoB', 'aaa@bbb.com', 21, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (3, 'ImieA', 'NazwiskoA', 'aaa@bbb.com', 23, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (4, 'ImieD', 'NazwiskoD', 'aaa@bbb.com', 25, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (5, 'ImieE', 'NazwiskoE', 'aaa@bbb.com', 27, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (6, 'ImieF', 'NazwiskoF', 'aaa@bbb.com', 24, '2');" +
+                    "insert into teacher_entity (id, imię, nazwisko, email, wiek, przedmiot) values (7, 'ImieG', 'NazwiskoG', 'aaa@bbb.com', 26, '3');"
                     , executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql (statements =
-                    "DELETE FROM teacher WHERE id = 1;" +
-                    "DELETE FROM teacher WHERE id = 2;" +
-                    "DELETE FROM teacher WHERE id = 3;" +
-                    "DELETE FROM teacher WHERE id = 4;" +
-                    "DELETE FROM teacher WHERE id = 5;" +
-                    "DELETE FROM teacher WHERE id = 6;" +
-                    "DELETE FROM teacher WHERE id = 7;"
+                    "DELETE FROM teacher_entity WHERE id = 1;" +
+                    "DELETE FROM teacher_entity WHERE id = 2;" +
+                    "DELETE FROM teacher_entity WHERE id = 3;" +
+                    "DELETE FROM teacher_entity WHERE id = 4;" +
+                    "DELETE FROM teacher_entity WHERE id = 5;" +
+                    "DELETE FROM teacher_entity WHERE id = 6;" +
+                    "DELETE FROM teacher_entity WHERE id = 7;"
                     , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturnPageOfTeachers() throws URISyntaxException {
 

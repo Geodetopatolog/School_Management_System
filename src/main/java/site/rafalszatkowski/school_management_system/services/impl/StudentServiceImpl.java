@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.rafalszatkowski.school_management_system.domain.Student;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.repositories.StudentRepository;
 import site.rafalszatkowski.school_management_system.repositories.TeacherRepository;
 import site.rafalszatkowski.school_management_system.services.StudentService;
@@ -21,35 +21,35 @@ public class StudentServiceImpl implements StudentService {
     final TeacherRepository teacherRepository;
 
     @Override
-    public boolean addStudent(Student student) {
+    public boolean addStudent(StudentEntity studentEntity) {
 
-        Optional<Student> optionalStudent = studentRepository.getStudentByAllData(student.getName(), student.getSurname(), student.getEmail(), student.getAge());
+        Optional<StudentEntity> optionalStudent = studentRepository.getStudentByAllData(studentEntity.getName(), studentEntity.getSurname(), studentEntity.getEmail(), studentEntity.getAge());
 
         if (optionalStudent.isPresent()) {
             return false;
         } else {
-            studentRepository.save(student);
+            studentRepository.save(studentEntity);
             return true;
         }
     }
 
     @Override
-    public Optional<Student> getStudent(Long idStudent) {
+    public Optional<StudentEntity> getStudent(Long idStudent) {
         return studentRepository.findById(idStudent);
     }
 
     @Override
-    public Optional<List<Student>> getStudent(String id, String name, String surname, String email, String age, String degreeCourse) {
+    public Optional<List<StudentEntity>> getStudent(String id, String name, String surname, String email, String age, String degreeCourse) {
 
         return studentRepository.getStudentsBySpecificData(id, name, surname, email, age, degreeCourse);
     }
 
     @Override
-    public boolean updateStudent(Student student) {
-        Optional<Student> optionalStudent = studentRepository.findById(student.getIdStudent());
+    public boolean updateStudent(StudentEntity studentEntity) {
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(studentEntity.getIdStudent());
 
         if (optionalStudent.isPresent()){
-            studentRepository.save(student);
+            studentRepository.save(studentEntity);
             return true;
         } else {
             return false;
@@ -58,7 +58,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public boolean deleteStudent(Long id) {
-        Optional<Student> optionalStudent = studentRepository.findById(id);
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(id);
 
         if (optionalStudent.isPresent()) {
 
@@ -71,35 +71,35 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        return (List<Student>) studentRepository.findAll();
+    public List<StudentEntity> getAllStudents() {
+        return (List<StudentEntity>) studentRepository.findAll();
     }
 
     @Override
-    public Page<Student> getAllStudents(Pageable pageable) {
+    public Page<StudentEntity> getAllStudents(Pageable pageable) {
         return studentRepository.findAll(pageable);
     }
 
     @Override
-    public List<Student> getAllStudents(Sort sort) {
-        return (List<Student>) studentRepository.findAll(sort);
+    public List<StudentEntity> getAllStudents(Sort sort) {
+        return (List<StudentEntity>) studentRepository.findAll(sort);
     }
 
     @Override
     public boolean addStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(idStudent);
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(idTeacher);
 
         if (optionalStudent.isPresent() && optionalTeacher.isPresent()) {
 
-            Student student = optionalStudent.get();
-            Teacher teacher = optionalTeacher.get();
+            StudentEntity studentEntity = optionalStudent.get();
+            TeacherEntity teacherEntity = optionalTeacher.get();
 
-            student.addTeacher(teacher);
-            teacher.addStudent(student);
+            studentEntity.addTeacher(teacherEntity);
+            teacherEntity.addStudent(studentEntity);
 
-            studentRepository.save(student);
+            studentRepository.save(studentEntity);
             return true;
         }
         else return false;
@@ -108,18 +108,18 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public boolean deleteStudentsTeacher(Long idStudent, Long idTeacher) {
 
-        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(idStudent);
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(idTeacher);
 
         if (optionalStudent.isPresent() && optionalTeacher.isPresent()) {
 
-            Student student = optionalStudent.get();
-            Teacher teacher = optionalTeacher.get();
+            StudentEntity studentEntity = optionalStudent.get();
+            TeacherEntity teacherEntity = optionalTeacher.get();
 
-            student.removeTeacher(teacher);
-            teacher.removeStudent(student);
+            studentEntity.removeTeacher(teacherEntity);
+            teacherEntity.removeStudent(studentEntity);
 
-            studentRepository.save(student);
+            studentRepository.save(studentEntity);
 
             return true;
         }

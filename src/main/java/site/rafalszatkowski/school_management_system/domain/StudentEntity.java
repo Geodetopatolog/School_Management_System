@@ -11,7 +11,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Student extends Person {
+public class StudentEntity extends Person {
 
 
     @Id
@@ -28,30 +28,30 @@ public class Student extends Person {
             joinColumns = @JoinColumn(name = "idStudent"),
             inverseJoinColumns = @JoinColumn(name = "idTeacher")
     )
-    private Set<Teacher> teachers = new HashSet<>();
+    private Set<TeacherEntity> teachers = new HashSet<>();
 
 
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "StudentEntity{" +
                 "idStudent=" + idStudent +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 ", age='" + getAge() + '\'' +
                 ", degreeCourse='" + degreeCourse + '\'' +
-                ", teachers=" + teachers +
+                ", teacherEntities=" + teachers +
                 '}';
     }
 
-    public void addTeacher(Teacher teacher) {
-        teachers.add(teacher);
+    public void addTeacher(TeacherEntity teacherEntity) {
+        teachers.add(teacherEntity);
     }
 
-    public void removeTeacher(Teacher teacher) {
-        this.teachers.remove(teacher);
-        teacher.getStudents().remove(this);
+    public void removeTeacher(TeacherEntity teacherEntity) {
+        this.teachers.remove(teacherEntity);
+        teacherEntity.getStudents().remove(this);
     }
 
 }

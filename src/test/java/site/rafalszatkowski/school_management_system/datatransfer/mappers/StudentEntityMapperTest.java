@@ -2,10 +2,10 @@ package site.rafalszatkowski.school_management_system.datatransfer.mappers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
 import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
 import site.rafalszatkowski.school_management_system.dto.StudentDTO;
-import site.rafalszatkowski.school_management_system.domain.Student;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 @DirtiesContext
-class StudentMapperTest {
+class StudentEntityMapperTest {
 
     @Test
     void studentCreationDtoToStudent() {
@@ -26,26 +26,26 @@ class StudentMapperTest {
                 .degreeCourse("K")
                 .build();
 
-        Student student = new Student();
-                student.setName("I");
-                student.setSurname("N");
-                student.setEmail("e@e.e");
-                student.setAge(22);
-                student.setDegreeCourse("K");
+        StudentEntity studentEntity = new StudentEntity();
+                studentEntity.setName("I");
+                studentEntity.setSurname("N");
+                studentEntity.setEmail("e@e.e");
+                studentEntity.setAge(22);
+                studentEntity.setDegreeCourse("K");
 
-        assertEquals(student, StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO));
+        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO));
     }
 
     @Test
     void studentToStudentDto() {
 
-        Student student = new Student();
-                student.setName("I");
-                student.setSurname("N");
-                student.setEmail("e@e.e");
-                student.setAge(22);
-                student.setDegreeCourse("K");
-                student.addTeacher(new Teacher());
+        StudentEntity studentEntity = new StudentEntity();
+                studentEntity.setName("I");
+                studentEntity.setSurname("N");
+                studentEntity.setEmail("e@e.e");
+                studentEntity.setAge(22);
+                studentEntity.setDegreeCourse("K");
+                studentEntity.addTeacher(new TeacherEntity());
 
         StudentDTO studentDTO = StudentDTO.builder()
                 .name("I")
@@ -56,7 +56,7 @@ class StudentMapperTest {
                 .numberOfTeachers(1)
                 .build();
 
-        assertEquals(studentDTO, StudentMapper.INSTANCE.StudentToStudentDto(student));
+        assertEquals(studentDTO, StudentMapper.INSTANCE.StudentToStudentDto(studentEntity));
     }
 
     @Test
@@ -71,37 +71,37 @@ class StudentMapperTest {
                 .numberOfTeachers(1)
                 .build();
 
-        Student student = new Student();
-                student.setName("I");
-                student.setSurname("N");
-                student.setEmail("e@e.e");
-                student.setAge(22);
-                student.setDegreeCourse("K");
+        StudentEntity studentEntity = new StudentEntity();
+                studentEntity.setName("I");
+                studentEntity.setSurname("N");
+                studentEntity.setEmail("e@e.e");
+                studentEntity.setAge(22);
+                studentEntity.setDegreeCourse("K");
 
-        assertEquals(student, StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO));
+        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO));
     }
 
     @Test
     void studentsToStudentDtos() {
 
-        Student student1 = new Student();
-        student1.setName("Ii");
-        student1.setSurname("Nn");
-        student1.setEmail("e@e.e");
-        student1.setAge(22);
-        student1.setDegreeCourse("Kk");
+        StudentEntity studentEntity1 = new StudentEntity();
+        studentEntity1.setName("Ii");
+        studentEntity1.setSurname("Nn");
+        studentEntity1.setEmail("e@e.e");
+        studentEntity1.setAge(22);
+        studentEntity1.setDegreeCourse("Kk");
 
-        Student student2 = new Student();
-        student2.setName("I");
-        student2.setSurname("N");
-        student2.setEmail("e@e.e");
-        student2.setAge(22);
-        student2.setDegreeCourse("K");
+        StudentEntity studentEntity2 = new StudentEntity();
+        studentEntity2.setName("I");
+        studentEntity2.setSurname("N");
+        studentEntity2.setEmail("e@e.e");
+        studentEntity2.setAge(22);
+        studentEntity2.setDegreeCourse("K");
 
         //użyto Listy zamiast Setu, żeby uniknąć różnicy w kolejności elementów przy zamianie kolekcji
-        List<Student> students = new ArrayList<>();
-        students.add(student1);
-        students.add(student2);
+        List<StudentEntity> studentEntities = new ArrayList<>();
+        studentEntities.add(studentEntity1);
+        studentEntities.add(studentEntity2);
 
         StudentDTO studentDTO1 = StudentDTO.builder()
                 .name("Ii")
@@ -125,7 +125,7 @@ class StudentMapperTest {
         studentDTOS.add(studentDTO1);
         studentDTOS.add(studentDTO2);
 
-        assertEquals(studentDTOS, StudentMapper.INSTANCE.StudentsToStudentDtos(students));
+        assertEquals(studentDTOS, StudentMapper.INSTANCE.StudentsToStudentDtos(studentEntities));
     }
 
 }

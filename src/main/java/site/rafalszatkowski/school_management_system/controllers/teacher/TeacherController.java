@@ -12,7 +12,7 @@ import site.rafalszatkowski.school_management_system.components.Validator;
 import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
 import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
 import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
 import java.util.List;
@@ -58,7 +58,7 @@ public class TeacherController {
                 && email.equals("%%") && age.equals("%%") && schoolSubject.equals("%%")) {
             return ResponseEntity.badRequest().body("Nie wprowadzono parametrów wyszukiwania");
         } else {
-            Optional<List<Teacher>> optionalQueryResult = teacherService.getTeacher(id, name, surname, email, age, schoolSubject);
+            Optional<List<TeacherEntity>> optionalQueryResult = teacherService.getTeacher(id, name, surname, email, age, schoolSubject);
             if (optionalQueryResult.isPresent() && optionalQueryResult.get().size()>0) {
                 return ResponseEntity.status(200).body(TeacherMapper.INSTANCE.TeachersToTeacherDtos(optionalQueryResult.get()));
             } else {
@@ -76,11 +76,11 @@ public class TeacherController {
                 teacherDTO.getSurname(),
                 teacherDTO.getEmail(),
                 teacherDTO.getAge())) {
-            Teacher teacher = TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacherDTO);
+            TeacherEntity teacherEntity = TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacherDTO);
 
-            System.out.println(teacher);
+            System.out.println(teacherEntity);
 
-            if (teacherService.updateTeacher(teacher)){
+            if (teacherService.updateTeacher(teacherEntity)){
                 return ResponseEntity.status(HttpStatus.ACCEPTED).build();
             } else {
                 return ResponseEntity.badRequest().body("Nauczyciel, którego dane próbowano uaktualnić, " +
@@ -123,7 +123,7 @@ public class TeacherController {
                     sortOrder = Sort.by(sortBy.get()).descending();
                 }
                 pageRequest = PageRequest.of(currentPage, PAGE_SIZE, sortOrder);
-                Page<Teacher> teachers = teacherService.getAllTeachers(pageRequest);
+                Page<TeacherEntity> teachers = teacherService.getAllTeachers(pageRequest);
                 return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teachers.getContent());
 
             } else {
@@ -142,7 +142,7 @@ public class TeacherController {
                 //same strony
                 int currentPage = Integer.parseInt(page.get());
                 Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
-                Page<Teacher> teachers = teacherService.getAllTeachers(pageRequest);
+                Page<TeacherEntity> teachers = teacherService.getAllTeachers(pageRequest);
                 return TeacherMapper.INSTANCE.TeachersToTeacherDtos(teachers.getContent());
             } else {
                 //bez niczego

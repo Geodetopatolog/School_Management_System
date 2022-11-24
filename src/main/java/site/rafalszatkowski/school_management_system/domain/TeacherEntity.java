@@ -12,7 +12,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Teacher extends Person{
+public class TeacherEntity extends Person{
 
 
 
@@ -25,28 +25,28 @@ public class Teacher extends Person{
     private String schoolSubject;
 
     @ManyToMany (mappedBy = "teachers")
-    private Set<Student> students = new HashSet<>();
+    private Set<StudentEntity> students = new HashSet<>();
 
     @Override
     public String toString() {
-        return "Teacher{" +
+        return "TeacherEntity{" +
                 "idTeacher=" + idTeacher +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", email='" + getEmail() + '\'' +
                 ", age='" + getAge() + '\'' +
                 ", schoolSubject='" + schoolSubject + '\'' +
-                ", students=" + students +
+                ", studentEntities=" + students +
                 '}';
     }
 
 
-    public void addStudent(Student student) {
-        students.add(student);
+    public void addStudent(StudentEntity studentEntity) {
+        students.add(studentEntity);
     }
 
-    public void removeStudent(Student student) {
-        this.students.remove(student);
-        student.getTeachers().remove(this);
+    public void removeStudent(StudentEntity studentEntity) {
+        this.students.remove(studentEntity);
+        studentEntity.getTeachers().remove(this);
     }
 }

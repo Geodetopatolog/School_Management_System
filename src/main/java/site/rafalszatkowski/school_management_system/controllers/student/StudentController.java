@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.rafalszatkowski.school_management_system.components.Validator;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
 import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
 import site.rafalszatkowski.school_management_system.dto.StudentDTO;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
-import site.rafalszatkowski.school_management_system.domain.Student;
 import site.rafalszatkowski.school_management_system.services.StudentService;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class StudentController {
             if (studentService.addStudent(StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO))) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
-                return ResponseEntity.badRequest().body("Student już istnieje w bazie");
+                return ResponseEntity.badRequest().body("StudentEntity już istnieje w bazie");
             }
         } else {
             return ResponseEntity.badRequest().body("Niepoprawne dane: Imię i Nazwisko krótsze niż 2 litery, " +
@@ -58,7 +58,7 @@ public class StudentController {
                 && email.equals("%%") && age.equals("%%") && degreeCourse.equals("%%")) {
                 return ResponseEntity.badRequest().body("Nie wprowadzono parametrów wyszukiwania");
         } else {
-            Optional<List<Student>> optionalQueryResult = studentService.getStudent(id, name, surname, email, age, degreeCourse);
+            Optional<List<StudentEntity>> optionalQueryResult = studentService.getStudent(id, name, surname, email, age, degreeCourse);
                 if (optionalQueryResult.isPresent() && optionalQueryResult.get().size()>0) {
                     return ResponseEntity.status(200).body(StudentMapper.INSTANCE.StudentsToStudentDtos(optionalQueryResult.get()));
                 } else {
@@ -75,12 +75,12 @@ public class StudentController {
                 studentDTO.getSurname(),
                 studentDTO.getEmail(),
                 studentDTO.getAge())) {
-            Student student = StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO);
+            StudentEntity studentEntity = StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO);
 
-            if (studentService.updateStudent(student)){
+            if (studentService.updateStudent(studentEntity)){
                 return ResponseEntity.status(HttpStatus.ACCEPTED).build();
             } else {
-                return ResponseEntity.badRequest().body("Student, którego dane próbowano uaktualnić, " +
+                return ResponseEntity.badRequest().body("StudentEntity, którego dane próbowano uaktualnić, " +
                         "nie występuje w bazie danych");
             }
         } else {
@@ -95,7 +95,7 @@ public class StudentController {
         if (studentService.deleteStudent(id)) {
             return ResponseEntity.ok().build();
         } else  {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Student, którego dane próbowano usunąć, " +
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("StudentEntity, którego dane próbowano usunąć, " +
                     "nie występuje w bazie danych");
         }
     }
@@ -118,7 +118,7 @@ public class StudentController {
                     sortOrder = Sort.by(sortBy.get()).descending();
                 }
                 pageRequest = PageRequest.of(currentPage, PAGE_SIZE, sortOrder);
-                Page<Student> students = studentService.getAllStudents(pageRequest);
+                Page<StudentEntity> students = studentService.getAllStudents(pageRequest);
                 return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
 
             } else {
@@ -137,7 +137,7 @@ public class StudentController {
                 //same strony
                 int currentPage = Integer.parseInt(page.get());
                 Pageable pageRequest = PageRequest.of(currentPage, PAGE_SIZE);
-                Page<Student> students = studentService.getAllStudents(pageRequest);
+                Page<StudentEntity> students = studentService.getAllStudents(pageRequest);
                 return StudentMapper.INSTANCE.StudentsToStudentDtos(students.getContent());
             } else {
                 //bez niczego

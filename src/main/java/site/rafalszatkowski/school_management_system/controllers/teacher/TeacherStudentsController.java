@@ -3,10 +3,10 @@ package site.rafalszatkowski.school_management_system.controllers.teacher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.dto.StudentDTO;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
-import site.rafalszatkowski.school_management_system.domain.Student;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
 import java.util.List;
@@ -21,11 +21,11 @@ public class TeacherStudentsController {
     @GetMapping("/teacher/student")
     public ResponseEntity<?> getTeachersStudent(@RequestParam Long idTeacher) {
 
-        Optional<Teacher> optionalTeacher = teacherService.getTeacher(idTeacher);
+        Optional<TeacherEntity> optionalTeacher = teacherService.getTeacher(idTeacher);
 
         if (optionalTeacher.isPresent()) {
-            List<Student> teacherStudents = optionalTeacher.get().getStudents().stream().toList();
-            List<StudentDTO> studentDTOS = StudentMapper.INSTANCE.StudentsToStudentDtos(teacherStudents);
+            List<StudentEntity> teacherStudentEntities = optionalTeacher.get().getStudents().stream().toList();
+            List<StudentDTO> studentDTOS = StudentMapper.INSTANCE.StudentsToStudentDtos(teacherStudentEntities);
             return ResponseEntity.status(200).body(studentDTOS);
         } else {
             return ResponseEntity.badRequest().body("Nauczyciel nie występuje w bazie");

@@ -5,8 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.rafalszatkowski.school_management_system.domain.Student;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.repositories.StudentRepository;
 import site.rafalszatkowski.school_management_system.repositories.TeacherRepository;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
@@ -22,33 +22,33 @@ public class TeacherServiceImpl implements TeacherService {
     final StudentRepository studentRepository;
 
     @Override
-    public boolean addTeacher(Teacher teacher) {
-        Optional<Teacher> optionalTeacher = teacherRepository.getTeacherByAllData(teacher.getName(), teacher.getSurname(), teacher.getEmail(), teacher.getAge());
+    public boolean addTeacher(TeacherEntity teacherEntity) {
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.getTeacherByAllData(teacherEntity.getName(), teacherEntity.getSurname(), teacherEntity.getEmail(), teacherEntity.getAge());
 
         if (optionalTeacher.isPresent()) {
             return false;
         } else {
-            teacherRepository.save(teacher);
+            teacherRepository.save(teacherEntity);
             return true;
         }
     }
 
     @Override
-    public Optional<Teacher> getTeacher(Long idTeacher) {
+    public Optional<TeacherEntity> getTeacher(Long idTeacher) {
         return teacherRepository.findById(idTeacher);
     }
 
     @Override
-    public Optional<List<Teacher>> getTeacher(String id, String name, String surname, String email, String age, String schoolSubject) {
+    public Optional<List<TeacherEntity>> getTeacher(String id, String name, String surname, String email, String age, String schoolSubject) {
         return teacherRepository.getTeacherBySpecificData(id, name, surname, email, age, schoolSubject);
     }
 
     @Override
-    public boolean updateTeacher(Teacher teacher) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(teacher.getIdTeacher());
+    public boolean updateTeacher(TeacherEntity teacherEntity) {
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(teacherEntity.getIdTeacher());
 
         if (optionalTeacher.isPresent()){
-            teacherRepository.save(teacher);
+            teacherRepository.save(teacherEntity);
             return true;
         } else {
             return false;
@@ -57,15 +57,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public boolean deleteTeacher(Long id) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(id);
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(id);
 
         if (optionalTeacher.isPresent()) {
 
-            Teacher teacher = optionalTeacher.get();
+            TeacherEntity teacherEntity = optionalTeacher.get();
 
-            teacher.getStudents().forEach(student -> student.getTeachers().remove(teacher));
+            teacherEntity.getStudents().forEach(student -> student.getTeachers().remove(teacherEntity));
 
-            teacherRepository.delete(teacher);
+            teacherRepository.delete(teacherEntity);
             return true;
         } else {
             return false;
@@ -73,33 +73,33 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> getAllTeachers() {
-        return (List<Teacher>) teacherRepository.findAll();
+    public List<TeacherEntity> getAllTeachers() {
+        return (List<TeacherEntity>) teacherRepository.findAll();
     }
 
     @Override
-    public Page<Teacher> getAllTeachers(Pageable pageable) {
+    public Page<TeacherEntity> getAllTeachers(Pageable pageable) {
         return teacherRepository.findAll(pageable);
     }
     @Override
-    public List<Teacher> getAllTeachers(Sort sort) {
-        return (List<Teacher>) teacherRepository.findAll(sort);
+    public List<TeacherEntity> getAllTeachers(Sort sort) {
+        return (List<TeacherEntity>) teacherRepository.findAll(sort);
     }
 
 
     @Override
     public boolean addTeachersStudent(Long idTeacher, Long idStudent) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
-        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(idStudent);
 
         if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
-            Teacher teacher = optionalTeacher.get();
-            Student student = optionalStudent.get();
+            TeacherEntity teacherEntity = optionalTeacher.get();
+            StudentEntity studentEntity = optionalStudent.get();
 
-            teacher.addStudent(student);
-            student.addTeacher(teacher);
+            teacherEntity.addStudent(studentEntity);
+            studentEntity.addTeacher(teacherEntity);
 
-            teacherRepository.save(teacher);
+            teacherRepository.save(teacherEntity);
             return true;
         }
         else return false;
@@ -107,16 +107,16 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public boolean deleteTeachersStudent(Long idTeacher, Long idStudent) {
-        Optional<Teacher> optionalTeacher = teacherRepository.findById(idTeacher);
-        Optional<Student> optionalStudent = studentRepository.findById(idStudent);
+        Optional<TeacherEntity> optionalTeacher = teacherRepository.findById(idTeacher);
+        Optional<StudentEntity> optionalStudent = studentRepository.findById(idStudent);
 
         if (optionalTeacher.isPresent() && optionalStudent.isPresent()) {
-            Teacher teacher = optionalTeacher.get();
-            Student student = optionalStudent.get();
+            TeacherEntity teacherEntity = optionalTeacher.get();
+            StudentEntity studentEntity = optionalStudent.get();
 
-            teacher.removeStudent(student);
-            student.removeTeacher(teacher);
-            teacherRepository.save(teacher);
+            teacherEntity.removeStudent(studentEntity);
+            studentEntity.removeTeacher(teacherEntity);
+            teacherRepository.save(teacherEntity);
 
             return true;
         }

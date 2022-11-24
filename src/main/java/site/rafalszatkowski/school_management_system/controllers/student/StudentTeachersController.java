@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
 import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
-import site.rafalszatkowski.school_management_system.domain.Student;
-import site.rafalszatkowski.school_management_system.domain.Teacher;
+import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
 import site.rafalszatkowski.school_management_system.services.StudentService;
 
 import java.util.List;
@@ -21,15 +21,15 @@ public class StudentTeachersController {
     @GetMapping("/student/teacher")
     public ResponseEntity<?> getStudentsTeacher(@RequestParam Long idStudent) {
 
-        Optional<Student> optionalStudent = studentService.getStudent(idStudent);
+        Optional<StudentEntity> optionalStudent = studentService.getStudent(idStudent);
 
 
         if (optionalStudent.isPresent()) {
-            List<Teacher> studentTeachers = optionalStudent.get().getTeachers().stream().toList();
+            List<TeacherEntity> studentTeachers = optionalStudent.get().getTeachers().stream().toList();
             List<TeacherDTO> teacherDTOS = TeacherMapper.INSTANCE.TeachersToTeacherDtos(studentTeachers);
             return ResponseEntity.status(200).body(teacherDTOS);
         } else {
-            return ResponseEntity.badRequest().body("Student nie występuje w bazie");
+            return ResponseEntity.badRequest().body("StudentEntity nie występuje w bazie");
         }
 
     }
