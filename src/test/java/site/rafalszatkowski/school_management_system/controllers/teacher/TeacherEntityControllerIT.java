@@ -14,8 +14,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
+import site.rafalszatkowski.school_management_system.dtos.Teacher;
+import site.rafalszatkowski.school_management_system.dtos.TeacherCreation;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,7 +51,7 @@ class TeacherEntityControllerIT {
     void shouldReturn2xxWhenAddTeacherSuccessfully() throws URISyntaxException {
 
         //given
-        TeacherCreationDTO teacherCreationDTO = TeacherCreationDTO.builder()
+        TeacherCreation teacherCreation = TeacherCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -60,10 +60,10 @@ class TeacherEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<TeacherCreationDTO> request = RequestEntity
+        RequestEntity<TeacherCreation> request = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(teacherCreationDTO);
+                .body(teacherCreation);
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
 
@@ -75,7 +75,7 @@ class TeacherEntityControllerIT {
     void shouldReturn4xxWhenDataNotValidated() throws URISyntaxException {
 
         //given
-        TeacherCreationDTO wrongName = TeacherCreationDTO.builder()
+        TeacherCreation wrongName = TeacherCreation.builder()
                 .name("I")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -83,7 +83,7 @@ class TeacherEntityControllerIT {
                 .schoolSubject("kierunekA")
                 .build();
 
-        TeacherCreationDTO wrongSurname = TeacherCreationDTO.builder()
+        TeacherCreation wrongSurname = TeacherCreation.builder()
                 .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
@@ -91,7 +91,7 @@ class TeacherEntityControllerIT {
                 .schoolSubject("kierunekA")
                 .build();
 
-        TeacherCreationDTO wrongEmail = TeacherCreationDTO.builder()
+        TeacherCreation wrongEmail = TeacherCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaabbb.com")
@@ -99,7 +99,7 @@ class TeacherEntityControllerIT {
                 .schoolSubject("kierunekA")
                 .build();
 
-        TeacherCreationDTO wrongAge = TeacherCreationDTO.builder()
+        TeacherCreation wrongAge = TeacherCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -108,22 +108,22 @@ class TeacherEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<TeacherCreationDTO> name = RequestEntity
+        RequestEntity<TeacherCreation> name = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongName);
 
-        RequestEntity<TeacherCreationDTO> surname = RequestEntity
+        RequestEntity<TeacherCreation> surname = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongSurname);
 
-        RequestEntity<TeacherCreationDTO> email = RequestEntity
+        RequestEntity<TeacherCreation> email = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongEmail);
 
-        RequestEntity<TeacherCreationDTO> age = RequestEntity
+        RequestEntity<TeacherCreation> age = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongAge);
@@ -154,7 +154,7 @@ class TeacherEntityControllerIT {
     void shouldReturn4xxWhenTeacherAlreadyExists() throws URISyntaxException {
 
         //given
-        TeacherCreationDTO teacherCreationDTO = TeacherCreationDTO.builder()
+        TeacherCreation teacherCreation = TeacherCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -163,10 +163,10 @@ class TeacherEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<TeacherCreationDTO> request = RequestEntity
+        RequestEntity<TeacherCreation> request = RequestEntity
                 .post(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(teacherCreationDTO);
+                .body(teacherCreation);
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
@@ -218,14 +218,14 @@ class TeacherEntityControllerIT {
                 .get(createServerAddress("/teacher/query?age=22&email=222@bbb.com"))
                 .build();
 
-        ResponseEntity<List<TeacherDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response6 = restTemplate.exchange(request6, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response7 = restTemplate.exchange(request7, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<TeacherDTO>> response8 = restTemplate.exchange(request8, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response6 = restTemplate.exchange(request6, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response7 = restTemplate.exchange(request7, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response8 = restTemplate.exchange(request8, new ParameterizedTypeReference<>(){});
 
         //then:
         Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());
@@ -288,7 +288,7 @@ class TeacherEntityControllerIT {
     void shouldReturn2xxWhenUpdateTeacherSuccessfully() throws URISyntaxException {
 
         //given
-        TeacherDTO teacherDTO = TeacherDTO.builder()
+        Teacher teacher = Teacher.builder()
                 .idTeacher(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
@@ -298,33 +298,33 @@ class TeacherEntityControllerIT {
                 .numberOfStudents(0)
                 .build();
 
-        System.out.println(teacherDTO);
+        System.out.println(teacher);
 
         //when
-        RequestEntity<TeacherDTO> request1 = RequestEntity
+        RequestEntity<Teacher> request1 = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(teacherDTO);
+                .body(teacher);
 
         RequestEntity<Void> request2 = RequestEntity
                 .get(createServerAddress("/teacher/query?id=1"))
                 .build();
 
         ResponseEntity<?> response1 = restTemplate.exchange(request1, ResponseEntity.class);
-        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Teacher>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
 
         //then
         assertTrue(response1.getStatusCode().is2xxSuccessful());
         assertTrue(response2.getStatusCode().is2xxSuccessful());
         assertEquals(1, response2.getBody().size());
-        assertEquals(response2.getBody().get(0), teacherDTO);
+        assertEquals(response2.getBody().get(0), teacher);
     }
 
     @Test
     void shouldReturn4xxWhenUpdateTeacherNotExists() throws URISyntaxException {
 
         //given
-        TeacherDTO teacherDTO = TeacherDTO.builder()
+        Teacher teacher = Teacher.builder()
                 .idTeacher(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
@@ -334,10 +334,10 @@ class TeacherEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<TeacherDTO> request = RequestEntity
+        RequestEntity<Teacher> request = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(teacherDTO);
+                .body(teacher);
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
@@ -350,7 +350,7 @@ class TeacherEntityControllerIT {
     void shouldReturn4xxWhenUpdateTeacherWithUnvalidatedData() throws URISyntaxException {
 
         //given
-        TeacherDTO name = TeacherDTO.builder()
+        Teacher name = Teacher.builder()
                 .idTeacher(1L)
                 .name("I")
                 .surname("NazwiskoA")
@@ -359,7 +359,7 @@ class TeacherEntityControllerIT {
                 .schoolSubject("1")
                 .build();
 
-        TeacherDTO surname = TeacherDTO.builder()
+        Teacher surname = Teacher.builder()
                 .idTeacher(1L)
                 .name("ImieA")
                 .surname("N")
@@ -368,7 +368,7 @@ class TeacherEntityControllerIT {
                 .surname("1")
                 .build();
 
-        TeacherDTO email = TeacherDTO.builder()
+        Teacher email = Teacher.builder()
                 .idTeacher(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
@@ -377,7 +377,7 @@ class TeacherEntityControllerIT {
                 .schoolSubject("1")
                 .build();
 
-        TeacherDTO age = TeacherDTO.builder()
+        Teacher age = Teacher.builder()
                 .idTeacher(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
@@ -387,22 +387,22 @@ class TeacherEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<TeacherDTO> request1 = RequestEntity
+        RequestEntity<Teacher> request1 = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(name);
 
-        RequestEntity<TeacherDTO> request2 = RequestEntity
+        RequestEntity<Teacher> request2 = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(surname);
 
-        RequestEntity<TeacherDTO> request3 = RequestEntity
+        RequestEntity<Teacher> request3 = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(email);
 
-        RequestEntity<TeacherDTO> request4 = RequestEntity
+        RequestEntity<Teacher> request4 = RequestEntity
                 .patch(createServerAddress("/teacher"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(age);
@@ -505,11 +505,11 @@ class TeacherEntityControllerIT {
                 .get(createServerAddress("/teacher/all?sortBy=age&descending=true"))
                 .build();
 
-        ResponseEntity<List<TeacherDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<TeacherDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<TeacherDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<TeacherDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<TeacherDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Teacher>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Teacher>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Teacher>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Teacher>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Teacher>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
 
         System.out.println(response1.getBody());
 

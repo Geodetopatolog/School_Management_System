@@ -3,7 +3,7 @@ package site.rafalszatkowski.school_management_system.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
 
 import java.util.List;
 import java.util.Optional;

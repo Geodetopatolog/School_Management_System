@@ -1,12 +1,12 @@
-package site.rafalszatkowski.school_management_system.services.impl;
+package site.rafalszatkowski.school_management_system.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
 import site.rafalszatkowski.school_management_system.repositories.StudentRepository;
 import site.rafalszatkowski.school_management_system.repositories.TeacherRepository;
 import site.rafalszatkowski.school_management_system.services.StudentService;

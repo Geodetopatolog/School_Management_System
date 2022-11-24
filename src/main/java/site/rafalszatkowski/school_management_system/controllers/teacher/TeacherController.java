@@ -8,11 +8,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.rafalszatkowski.school_management_system.components.Validator;
-import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
+import site.rafalszatkowski.school_management_system.validators.Validator;
+import site.rafalszatkowski.school_management_system.dtos.Teacher;
+import site.rafalszatkowski.school_management_system.dtos.TeacherCreation;
 import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
 import java.util.List;
@@ -27,14 +27,14 @@ public class TeacherController {
     final TeacherService teacherService;
 
     @PostMapping("/teacher")
-    public ResponseEntity<?> addTeacher(@RequestBody TeacherCreationDTO teacherCreationDTO) {
+    public ResponseEntity<?> addTeacher(@RequestBody TeacherCreation teacherCreation) {
 
         if (Validator.getInstance().validateAllData(
-                teacherCreationDTO.getName(),
-                teacherCreationDTO.getSurname(),
-                teacherCreationDTO.getEmail(),
-                teacherCreationDTO.getAge())) {
-            if (teacherService.addTeacher(TeacherMapper.INSTANCE.TeacherCreationDtoToTeacher(teacherCreationDTO))) {
+                teacherCreation.getName(),
+                teacherCreation.getSurname(),
+                teacherCreation.getEmail(),
+                teacherCreation.getAge())) {
+            if (teacherService.addTeacher(TeacherMapper.INSTANCE.TeacherCreationDtoToTeacher(teacherCreation))) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
                 return ResponseEntity.badRequest().body("Nauczyciel już istnieje w bazie");
@@ -69,14 +69,14 @@ public class TeacherController {
 
 
     @PatchMapping("/teacher")
-    public ResponseEntity<?> updateTeacher(@RequestBody TeacherDTO teacherDTO){
+    public ResponseEntity<?> updateTeacher(@RequestBody Teacher teacher){
 
         if (Validator.getInstance().validateAllData(
-                teacherDTO.getName(),
-                teacherDTO.getSurname(),
-                teacherDTO.getEmail(),
-                teacherDTO.getAge())) {
-            TeacherEntity teacherEntity = TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacherDTO);
+                teacher.getName(),
+                teacher.getSurname(),
+                teacher.getEmail(),
+                teacher.getAge())) {
+            TeacherEntity teacherEntity = TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacher);
 
             System.out.println(teacherEntity);
 
@@ -107,9 +107,9 @@ public class TeacherController {
 
 
     @GetMapping("/teacher/all")
-    public @ResponseBody List<TeacherDTO> getAllTeachers (@RequestParam Optional<String> page,
-                                                          @RequestParam Optional<String> sortBy,
-                                                          @RequestParam(defaultValue = "false") String descending
+    public @ResponseBody List<Teacher> getAllTeachers (@RequestParam Optional<String> page,
+                                                       @RequestParam Optional<String> sortBy,
+                                                       @RequestParam(defaultValue = "false") String descending
     ) {
         if (sortBy.isPresent()) {
             if (page.isPresent()) {

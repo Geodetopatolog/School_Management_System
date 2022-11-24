@@ -21,6 +21,7 @@
         <org.junit.jupiter.version>5.9.0</org.junit.jupiter.version>
         <org.apache.httpcomponents.version>4.5.13</org.apache.httpcomponents.version>
         <org.projectlombok.version>1.18.22</org.projectlombok.version>
+        <org.apache.commons.lang3.version>3.12.0</org.apache.commons.lang3.version>
 
     </properties>
 
@@ -73,6 +74,11 @@
             <artifactId>httpclient</artifactId>
             <version>${org.apache.httpcomponents.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${org.apache.commons.lang3.version}</version>
         </dependency>
 
     </dependencies>

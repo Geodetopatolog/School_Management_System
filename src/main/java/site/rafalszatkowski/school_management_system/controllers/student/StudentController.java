@@ -8,10 +8,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.rafalszatkowski.school_management_system.components.Validator;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
-import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.validators.Validator;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
+import site.rafalszatkowski.school_management_system.dtos.Student;
+import site.rafalszatkowski.school_management_system.dtos.StudentCreation;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 import site.rafalszatkowski.school_management_system.services.StudentService;
 
@@ -27,15 +27,15 @@ public class StudentController {
 
 
     @PostMapping("/student")
-    public ResponseEntity<?> addStudent(@RequestBody StudentCreationDTO studentCreationDTO) {
+    public ResponseEntity<?> addStudent(@RequestBody StudentCreation studentCreation) {
 
         if (Validator.getInstance().validateAllData(
-                studentCreationDTO.getName(),
-                studentCreationDTO.getSurname(),
-                studentCreationDTO.getEmail(),
-                studentCreationDTO.getAge())) {
+                studentCreation.getName(),
+                studentCreation.getSurname(),
+                studentCreation.getEmail(),
+                studentCreation.getAge())) {
 
-            if (studentService.addStudent(StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO))) {
+            if (studentService.addStudent(StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreation))) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
                 return ResponseEntity.badRequest().body("StudentEntity już istnieje w bazie");
@@ -68,14 +68,14 @@ public class StudentController {
     }
 
     @PatchMapping("/student")
-    public ResponseEntity<?> updateStudent(@RequestBody StudentDTO studentDTO){
+    public ResponseEntity<?> updateStudent(@RequestBody Student student){
 
         if (Validator.getInstance().validateAllData(
-                studentDTO.getName(),
-                studentDTO.getSurname(),
-                studentDTO.getEmail(),
-                studentDTO.getAge())) {
-            StudentEntity studentEntity = StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO);
+                student.getName(),
+                student.getSurname(),
+                student.getEmail(),
+                student.getAge())) {
+            StudentEntity studentEntity = StudentMapper.INSTANCE.StudentDtoToStudent(student);
 
             if (studentService.updateStudent(studentEntity)){
                 return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -101,9 +101,9 @@ public class StudentController {
     }
 
     @GetMapping("/student/all")
-    public @ResponseBody List<StudentDTO> getAllStudents (@RequestParam Optional<String> page,
-                                                          @RequestParam Optional<String> sortBy,
-                                                          @RequestParam(defaultValue = "false") String descending
+    public @ResponseBody List<Student> getAllStudents (@RequestParam Optional<String> page,
+                                                       @RequestParam Optional<String> sortBy,
+                                                       @RequestParam(defaultValue = "false") String descending
                                                           ) {
 
         if (sortBy.isPresent()) {

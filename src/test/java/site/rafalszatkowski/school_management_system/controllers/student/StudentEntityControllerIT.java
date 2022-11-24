@@ -9,8 +9,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.dtos.Student;
+import site.rafalszatkowski.school_management_system.dtos.StudentCreation;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +41,7 @@ class StudentEntityControllerIT {
                         , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn2xxWhenAddStudentSuccessfully() throws URISyntaxException {
         //given
-        StudentCreationDTO studentCreationDTO = StudentCreationDTO.builder()
+        StudentCreation studentCreation = StudentCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -50,10 +50,10 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentCreationDTO> request = RequestEntity
+        RequestEntity<StudentCreation> request = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(studentCreationDTO);
+                .body(studentCreation);
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
 
@@ -65,7 +65,7 @@ class StudentEntityControllerIT {
     void shouldReturn4xxWhenDataNotValidated() throws URISyntaxException {
 
         //given
-        StudentCreationDTO wrongName = StudentCreationDTO.builder()
+        StudentCreation wrongName = StudentCreation.builder()
                 .name("I")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -73,7 +73,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("kierunek1")
                 .build();
 
-        StudentCreationDTO wrongSurname = StudentCreationDTO.builder()
+        StudentCreation wrongSurname = StudentCreation.builder()
                 .name("ImieA")
                 .surname("N")
                 .email("aaa@bbb.com")
@@ -81,7 +81,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("kierunekA")
                 .build();
 
-        StudentCreationDTO wrongEmail = StudentCreationDTO.builder()
+        StudentCreation wrongEmail = StudentCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaabb.com")
@@ -89,7 +89,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("kierunekA")
                 .build();
 
-        StudentCreationDTO tooYoung = StudentCreationDTO.builder()
+        StudentCreation tooYoung = StudentCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -98,22 +98,22 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentCreationDTO> name = RequestEntity
+        RequestEntity<StudentCreation> name = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongName);
 
-        RequestEntity<StudentCreationDTO> surname = RequestEntity
+        RequestEntity<StudentCreation> surname = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongSurname);
 
-        RequestEntity<StudentCreationDTO> email = RequestEntity
+        RequestEntity<StudentCreation> email = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(wrongEmail);
 
-        RequestEntity<StudentCreationDTO> age = RequestEntity
+        RequestEntity<StudentCreation> age = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(tooYoung);
@@ -142,7 +142,7 @@ class StudentEntityControllerIT {
                         , executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void shouldReturn4xxWhenStudentAlreadyExists() throws URISyntaxException {
         //given
-        StudentCreationDTO studentCreationDTO = StudentCreationDTO.builder()
+        StudentCreation studentCreation = StudentCreation.builder()
                 .name("ImieA")
                 .surname("NazwiskoA")
                 .email("aaa@bbb.com")
@@ -151,10 +151,10 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentCreationDTO> request = RequestEntity
+        RequestEntity<StudentCreation> request = RequestEntity
                 .post(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(studentCreationDTO);
+                .body(studentCreation);
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
@@ -205,14 +205,14 @@ class StudentEntityControllerIT {
                 .get(createServerAddress("/student/query?age=22&email=222@bbb.com"))
                 .build();
 
-        ResponseEntity<List<StudentDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response6 = restTemplate.exchange(request6, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response7 = restTemplate.exchange(request7, new ParameterizedTypeReference<>(){});
-        ResponseEntity<List<StudentDTO>> response8 = restTemplate.exchange(request8, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response6 = restTemplate.exchange(request6, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response7 = restTemplate.exchange(request7, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response8 = restTemplate.exchange(request8, new ParameterizedTypeReference<>(){});
 
         //then:
         Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());
@@ -285,7 +285,7 @@ class StudentEntityControllerIT {
     void shouldReturn2xxWhenUpdateStudentSuccessfully() throws URISyntaxException {
 
         //given
-        StudentDTO studentDTO = StudentDTO.builder()
+        Student student = Student.builder()
                 .idStudent(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
@@ -296,30 +296,30 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentDTO> request1 = RequestEntity
+        RequestEntity<Student> request1 = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(studentDTO);
+                .body(student);
 
         RequestEntity<Void> request2 = RequestEntity
                 .get(createServerAddress("/student/query?id=1"))
                 .build();
 
         ResponseEntity<?> response1 = restTemplate.exchange(request1, ResponseEntity.class);
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
+        ResponseEntity<List<Student>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>(){});
 
         //then
         assertTrue(response1.getStatusCode().is2xxSuccessful());
         assertTrue(response2.getStatusCode().is2xxSuccessful());
         assertEquals(1, response2.getBody().size());
-        assertEquals(response2.getBody().get(0), studentDTO);
+        assertEquals(response2.getBody().get(0), student);
     }
 
     @Test
     void shouldReturn4xxWhenUpdateStudentNotExists() throws URISyntaxException {
 
         //given
-        StudentDTO studentDTO = StudentDTO.builder()
+        Student student = Student.builder()
                 .idStudent(1L)
                 .name("ImieB")
                 .surname("NazwiskoB")
@@ -329,10 +329,10 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentDTO> request = RequestEntity
+        RequestEntity<Student> request = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(studentDTO);
+                .body(student);
 
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
@@ -345,7 +345,7 @@ class StudentEntityControllerIT {
     void shouldReturn4xxWhenUpdateStudentWithUnvalidatedData() throws URISyntaxException {
 
         //given
-        StudentDTO name = StudentDTO.builder()
+        Student name = Student.builder()
                 .idStudent(1L)
                 .name("I")
                 .surname("NazwiskoB")
@@ -354,7 +354,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("1")
                 .build();
 
-        StudentDTO surname = StudentDTO.builder()
+        Student surname = Student.builder()
                 .idStudent(1L)
                 .name("ImieA")
                 .surname("N")
@@ -363,7 +363,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("1")
                 .build();
 
-        StudentDTO email = StudentDTO.builder()
+        Student email = Student.builder()
                 .idStudent(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
@@ -372,7 +372,7 @@ class StudentEntityControllerIT {
                 .degreeCourse("1")
                 .build();
 
-        StudentDTO age = StudentDTO.builder()
+        Student age = Student.builder()
                 .idStudent(1L)
                 .name("ImieA")
                 .surname("NazwiskoB")
@@ -382,22 +382,22 @@ class StudentEntityControllerIT {
                 .build();
 
         //when
-        RequestEntity<StudentDTO> request1 = RequestEntity
+        RequestEntity<Student> request1 = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(name);
 
-        RequestEntity<StudentDTO> request2 = RequestEntity
+        RequestEntity<Student> request2 = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(surname);
 
-        RequestEntity<StudentDTO> request3 = RequestEntity
+        RequestEntity<Student> request3 = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(email);
 
-        RequestEntity<StudentDTO> request4 = RequestEntity
+        RequestEntity<Student> request4 = RequestEntity
                 .patch(createServerAddress("/student"))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(age);
@@ -500,11 +500,11 @@ class StudentEntityControllerIT {
                 .get(createServerAddress("/student/all?sortBy=age&descending=true"))
                 .build();
 
-        ResponseEntity<List<StudentDTO>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<StudentDTO>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<StudentDTO>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
-        ResponseEntity<List<StudentDTO>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response1 = restTemplate.exchange(request1, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response3 = restTemplate.exchange(request3, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response4 = restTemplate.exchange(request4, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response5 = restTemplate.exchange(request5, new ParameterizedTypeReference<>() {});
 
         //then
         Assertions.assertTrue(response1.getStatusCode().is2xxSuccessful());

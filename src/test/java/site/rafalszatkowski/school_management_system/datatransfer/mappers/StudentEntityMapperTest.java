@@ -2,10 +2,10 @@ package site.rafalszatkowski.school_management_system.datatransfer.mappers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
-import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
+import site.rafalszatkowski.school_management_system.dtos.Student;
+import site.rafalszatkowski.school_management_system.dtos.StudentCreation;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ class StudentEntityMapperTest {
 
     @Test
     void studentCreationDtoToStudent() {
-        StudentCreationDTO studentCreationDTO = StudentCreationDTO.builder()
+        StudentCreation studentCreation = StudentCreation.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -33,7 +33,7 @@ class StudentEntityMapperTest {
                 studentEntity.setAge(22);
                 studentEntity.setDegreeCourse("K");
 
-        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreationDTO));
+        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentCreationDtoToStudent(studentCreation));
     }
 
     @Test
@@ -47,7 +47,7 @@ class StudentEntityMapperTest {
                 studentEntity.setDegreeCourse("K");
                 studentEntity.addTeacher(new TeacherEntity());
 
-        StudentDTO studentDTO = StudentDTO.builder()
+        Student student = Student.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -56,13 +56,13 @@ class StudentEntityMapperTest {
                 .numberOfTeachers(1)
                 .build();
 
-        assertEquals(studentDTO, StudentMapper.INSTANCE.StudentToStudentDto(studentEntity));
+        assertEquals(student, StudentMapper.INSTANCE.StudentToStudentDto(studentEntity));
     }
 
     @Test
     void studentDtoToStudent() {
 
-        StudentDTO studentDTO = StudentDTO.builder()
+        Student student = Student.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -78,7 +78,7 @@ class StudentEntityMapperTest {
                 studentEntity.setAge(22);
                 studentEntity.setDegreeCourse("K");
 
-        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentDtoToStudent(studentDTO));
+        assertEquals(studentEntity, StudentMapper.INSTANCE.StudentDtoToStudent(student));
     }
 
     @Test
@@ -103,7 +103,7 @@ class StudentEntityMapperTest {
         studentEntities.add(studentEntity1);
         studentEntities.add(studentEntity2);
 
-        StudentDTO studentDTO1 = StudentDTO.builder()
+        Student student1 = Student.builder()
                 .name("Ii")
                 .surname("Nn")
                 .email("e@e.e")
@@ -112,7 +112,7 @@ class StudentEntityMapperTest {
                 .numberOfTeachers(0)
                 .build();
 
-        StudentDTO studentDTO2 = StudentDTO.builder()
+        Student student2 = Student.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -121,11 +121,11 @@ class StudentEntityMapperTest {
                 .numberOfTeachers(0)
                 .build();
 
-        List<StudentDTO> studentDTOS = new ArrayList<>();
-        studentDTOS.add(studentDTO1);
-        studentDTOS.add(studentDTO2);
+        List<Student> students = new ArrayList<>();
+        students.add(student1);
+        students.add(student2);
 
-        assertEquals(studentDTOS, StudentMapper.INSTANCE.StudentsToStudentDtos(studentEntities));
+        assertEquals(students, StudentMapper.INSTANCE.StudentsToStudentDtos(studentEntities));
     }
 
 }

@@ -1,11 +1,11 @@
-package site.rafalszatkowski.school_management_system.dto;
+package site.rafalszatkowski.school_management_system.dtos;
 
 
 import lombok.Builder;
 import lombok.Data;
 @Data
 @Builder
-public class StudentCreationDTO {
+public class StudentCreation {
 
     private String name;
     private String surname;

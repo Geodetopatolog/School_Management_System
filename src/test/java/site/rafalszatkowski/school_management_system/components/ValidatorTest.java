@@ -1,6 +1,7 @@
 package site.rafalszatkowski.school_management_system.components;
 
 import org.junit.jupiter.api.Test;
+import site.rafalszatkowski.school_management_system.validators.Validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 

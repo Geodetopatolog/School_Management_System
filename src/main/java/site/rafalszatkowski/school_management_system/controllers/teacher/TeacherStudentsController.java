@@ -1,11 +1,12 @@
 package site.rafalszatkowski.school_management_system.controllers.teacher;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
+import site.rafalszatkowski.school_management_system.dtos.Student;
 import site.rafalszatkowski.school_management_system.mappers.StudentMapper;
 import site.rafalszatkowski.school_management_system.services.TeacherService;
 
@@ -25,8 +26,8 @@ public class TeacherStudentsController {
 
         if (optionalTeacher.isPresent()) {
             List<StudentEntity> teacherStudentEntities = optionalTeacher.get().getStudents().stream().toList();
-            List<StudentDTO> studentDTOS = StudentMapper.INSTANCE.StudentsToStudentDtos(teacherStudentEntities);
-            return ResponseEntity.status(200).body(studentDTOS);
+            List<Student> students = StudentMapper.INSTANCE.StudentsToStudentDtos(teacherStudentEntities);
+            return ResponseEntity.status(200).body(students);
         } else {
             return ResponseEntity.badRequest().body("Nauczyciel nie występuje w bazie");
         }
@@ -34,10 +35,10 @@ public class TeacherStudentsController {
     }
 
     @PatchMapping("/teacher/student")
-    public ResponseEntity<?> addTeachersStudent(Long idTeacher, Long idStudent) {
+    public ResponseEntity<?> addTeachersStudent(String idTeacher, String idStudent) {
 
-        if (idTeacher != null && idStudent != null) {
-            boolean anyStudentAdded = teacherService.addTeachersStudent(idTeacher, idStudent);
+        if (StringUtils.isNoneBlank(idTeacher) && StringUtils.isNoneBlank(idStudent)) {
+            boolean anyStudentAdded = teacherService.addTeachersStudent(Long.parseLong(idTeacher), Long.parseLong(idStudent));
             if (anyStudentAdded) {
                 return ResponseEntity.accepted().build();
             }
@@ -48,10 +49,10 @@ public class TeacherStudentsController {
     }
 
     @DeleteMapping("/teacher/student")
-    public ResponseEntity<?> deleteTeachersStudent(Long idTeacher, Long idStudent) {
+    public ResponseEntity<?> deleteTeachersStudent(String idTeacher, String idStudent) {
 
-        if (idTeacher != null && idStudent != null) {
-            boolean anyStudentRemoved = teacherService.deleteTeachersStudent(idTeacher, idStudent);
+        if (StringUtils.isNoneBlank(idTeacher) && StringUtils.isNoneBlank(idStudent)) {
+            boolean anyStudentRemoved = teacherService.deleteTeachersStudent(Long.parseLong(idTeacher), Long.parseLong(idStudent));
             if (anyStudentRemoved) {
                 return ResponseEntity.ok().build();
             }

@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.components;
+package site.rafalszatkowski.school_management_system.validators;
 
 import java.util.regex.Pattern;
 

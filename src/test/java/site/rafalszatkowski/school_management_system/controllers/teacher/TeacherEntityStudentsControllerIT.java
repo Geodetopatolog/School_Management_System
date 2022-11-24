@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.dtos.Student;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -56,7 +56,7 @@ class TeacherEntityStudentsControllerIT {
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -132,7 +132,7 @@ class TeacherEntityStudentsControllerIT {
                 .get(createServerAddress("/teacher/student?idTeacher=3"))
                 .build();
 
-        ResponseEntity<List<StudentDTO>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response = restTemplate.exchange(request, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());
@@ -170,7 +170,7 @@ class TeacherEntityStudentsControllerIT {
                 .build();
 
         ResponseEntity<?> response = restTemplate.exchange(request, ResponseEntity.class);
-        ResponseEntity<List<StudentDTO>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
+        ResponseEntity<List<Student>> response2 = restTemplate.exchange(request2, new ParameterizedTypeReference<>() {});
 
         //then
         assertTrue(response.getStatusCode().is2xxSuccessful());

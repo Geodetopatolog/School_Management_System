@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
 
 import java.util.List;
 import java.util.Optional;

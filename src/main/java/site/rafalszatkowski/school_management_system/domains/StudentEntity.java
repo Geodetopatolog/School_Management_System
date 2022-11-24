@@ -1,4 +1,4 @@
-package site.rafalszatkowski.school_management_system.domain;
+package site.rafalszatkowski.school_management_system.domains;
 
 import lombok.*;
 

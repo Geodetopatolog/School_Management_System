@@ -3,9 +3,9 @@ package site.rafalszatkowski.school_management_system.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
-import site.rafalszatkowski.school_management_system.dto.StudentCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.StudentDTO;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
+import site.rafalszatkowski.school_management_system.dtos.Student;
+import site.rafalszatkowski.school_management_system.dtos.StudentCreation;
 
 import java.util.List;
 
@@ -16,16 +16,16 @@ public interface StudentMapper {
 
     @Mapping(target = "teachers", ignore = true)
     @Mapping(target = "idStudent", ignore = true)
-    StudentEntity StudentCreationDtoToStudent (StudentCreationDTO studentCreationDTO);
+    StudentEntity StudentCreationDtoToStudent (StudentCreation studentCreation);
 
     @Mapping(target = "numberOfTeachers", expression = "java(studentEntity.getTeachers().size())")
-    StudentDTO StudentToStudentDto (StudentEntity studentEntity);
+    Student StudentToStudentDto (StudentEntity studentEntity);
 
     @Mapping(target = "teachers", ignore = true)
-    StudentEntity StudentDtoToStudent (StudentDTO studentDTO);
+    StudentEntity StudentDtoToStudent (Student student);
 
 
-    List<StudentDTO> StudentsToStudentDtos (List<StudentEntity> studentEntities);
+    List<Student> StudentsToStudentDtos (List<StudentEntity> studentEntities);
 
 
 

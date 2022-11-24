@@ -2,10 +2,10 @@ package site.rafalszatkowski.school_management_system.datatransfer.mappers;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.DirtiesContext;
-import site.rafalszatkowski.school_management_system.domain.TeacherEntity;
-import site.rafalszatkowski.school_management_system.dto.TeacherCreationDTO;
-import site.rafalszatkowski.school_management_system.dto.TeacherDTO;
-import site.rafalszatkowski.school_management_system.domain.StudentEntity;
+import site.rafalszatkowski.school_management_system.domains.TeacherEntity;
+import site.rafalszatkowski.school_management_system.dtos.Teacher;
+import site.rafalszatkowski.school_management_system.dtos.TeacherCreation;
+import site.rafalszatkowski.school_management_system.domains.StudentEntity;
 import site.rafalszatkowski.school_management_system.mappers.TeacherMapper;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ class TeacherEntityMapperTest {
     @Test
     void teacherCreationDtoToTeacher() {
 
-        TeacherCreationDTO teacherCreationDTO = TeacherCreationDTO.builder()
+        TeacherCreation teacherCreation = TeacherCreation.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -33,7 +33,7 @@ class TeacherEntityMapperTest {
         teacherEntity.setAge(22);
         teacherEntity.setSchoolSubject("P");
 
-        assertEquals(teacherEntity, TeacherMapper.INSTANCE.TeacherCreationDtoToTeacher(teacherCreationDTO));
+        assertEquals(teacherEntity, TeacherMapper.INSTANCE.TeacherCreationDtoToTeacher(teacherCreation));
 
     }
 
@@ -48,7 +48,7 @@ class TeacherEntityMapperTest {
         teacherEntity.setSchoolSubject("P");
         teacherEntity.addStudent(new StudentEntity());
 
-        TeacherDTO teacherDTO = TeacherDTO.builder()
+        Teacher teacher = Teacher.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -57,7 +57,7 @@ class TeacherEntityMapperTest {
                 .numberOfStudents(1)
                 .build();
 
-        assertEquals(teacherDTO, TeacherMapper.INSTANCE.TeacherToTeacherDto(teacherEntity));
+        assertEquals(teacher, TeacherMapper.INSTANCE.TeacherToTeacherDto(teacherEntity));
 
 
     }
@@ -65,7 +65,7 @@ class TeacherEntityMapperTest {
     @Test
     void teacherDtoToTeacher() {
 
-        TeacherDTO teacherDTO = TeacherDTO.builder()
+        Teacher teacher = Teacher.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -81,7 +81,7 @@ class TeacherEntityMapperTest {
         teacherEntity.setAge(22);
         teacherEntity.setSchoolSubject("P");
 
-        assertEquals(teacherEntity, TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacherDTO));
+        assertEquals(teacherEntity, TeacherMapper.INSTANCE.TeacherDtoToTeacher(teacher));
 
     }
 
@@ -108,7 +108,7 @@ class TeacherEntityMapperTest {
         teacherEntities.add(teacherEntity1);
         teacherEntities.add(teacherEntity2);
 
-        TeacherDTO teacherDTO1 = TeacherDTO.builder()
+        Teacher teacher1 = Teacher.builder()
                 .name("Ii")
                 .surname("Nn")
                 .email("e@e.e")
@@ -117,7 +117,7 @@ class TeacherEntityMapperTest {
                 .numberOfStudents(0)
                 .build();
 
-        TeacherDTO teacherDTO2 = TeacherDTO.builder()
+        Teacher teacher2 = Teacher.builder()
                 .name("I")
                 .surname("N")
                 .email("e@e.e")
@@ -127,11 +127,11 @@ class TeacherEntityMapperTest {
                 .build();
 
 
-        List<TeacherDTO> teacherDTOS = new ArrayList<>();
-        teacherDTOS.add(teacherDTO1);
-        teacherDTOS.add(teacherDTO2);
+        List<Teacher> teachers = new ArrayList<>();
+        teachers.add(teacher1);
+        teachers.add(teacher2);
 
-        assertEquals(teacherDTOS, TeacherMapper.INSTANCE.TeachersToTeacherDtos(teacherEntities));
+        assertEquals(teachers, TeacherMapper.INSTANCE.TeachersToTeacherDtos(teacherEntities));
     }
 
 }
